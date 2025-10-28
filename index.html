@@ -946,7 +946,7 @@
     let exchangeRates = {};
     let userBalances = { ...defaultBalances };
 
-    // ========== نظام تسجيل المستخدمين التلقائي ==========
+    // ========== نظام تسجيل المستخدمين المبسط ==========
     async function initializeUserSystem(userData) {
         showWalletLoading();
         
@@ -955,7 +955,7 @@
             
             if (connectionSuccess) {
                 console.log('✅ Using Firebase for user system');
-                await setupCompleteUserSystem(userData);
+                await setupSimpleUserSystem(userData);
                 updateFirebaseStatus(true);
             } else {
                 console.log('🔄 Using local storage for user system');
@@ -972,6 +972,79 @@
             updateFirebaseStatus(false);
         } finally {
             hideWalletLoading();
+        }
+    }
+
+    // ========== نظام المستخدم المبسط ==========
+    async function setupSimpleUserSystem(userData) {
+        try {
+            // التحقق من وجود المحفظة أو إنشائها
+            await initializeUserWallets(userData.id);
+            
+            // تحميل بيانات المحفظة
+            await loadUserWallets(userData.id);
+            
+            // تحديث بيانات المستخدم
+            currentUser = {
+                id: userData.id,
+                firstName: userData.first_name || 'مستخدم',
+                lastName: userData.last_name || '',
+                username: userData.username || null
+            };
+            
+            await fetchLivePrices();
+            
+        } catch (error) {
+            console.error('❌ Error in simple user system:', error);
+            throw error;
+        }
+    }
+
+    async function initializeUserWallets(userId) {
+        try {
+            const walletsRef = db.collection('wallets').doc(userId.toString());
+            const walletsDoc = await walletsDoc.get();
+            
+            if (!walletsDoc.exists) {
+                // إنشاء محفظة جديدة
+                const userWallets = {
+                    userId: userId,
+                    balances: { ...defaultBalances },
+                    totalBalanceUSD: 0,
+                    currencies: Object.keys(defaultBalances),
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    status: 'active'
+                };
+                
+                await walletsRef.set(userWallets);
+                console.log('✅ New wallet created for user:', userId);
+            }
+            
+        } catch (error) {
+            console.error('❌ Error initializing wallets:', error);
+            throw error;
+        }
+    }
+
+    async function loadUserWallets(userId) {
+        try {
+            const walletsRef = db.collection('wallets').doc(userId.toString());
+            const walletsDoc = await walletsRef.get();
+            
+            if (walletsDoc.exists) {
+                const walletsData = walletsDoc.data();
+                userBalances = walletsData.balances || { ...defaultBalances };
+            }
+            
+            // تحديث الواجهة
+            updateUserInterface(currentUser);
+            updateWalletsListRealTime();
+            updateTotalBalance();
+            
+        } catch (error) {
+            console.error('❌ Error loading user wallets:', error);
+            throw error;
         }
     }
 
@@ -1063,17 +1136,6 @@
                     [fromCurrency]: userBalances[fromCurrency],
                     [toCurrency]: userBalances[toCurrency]
                 });
-                
-                // تسجيل المعاملة
-                await logTransaction({
-                    type: 'convert',
-                    fromCurrency: fromCurrency,
-                    toCurrency: toCurrency,
-                    amount: amount,
-                    convertedAmount: convertedAmount,
-                    rate: rate,
-                    status: 'completed'
-                });
             }
             
             // تحديث التخزين المحلي
@@ -1129,7 +1191,7 @@
         return errors;
     }
 
-    // ========== إرسال الأموال بين المستخدمين - مصحح ==========
+    // ========== إرسال الأموال بين المستخدمين - مبسط ==========
     async function sendMoneyToUser(toUserId, currency, amount, description = "") {
         showWalletLoading();
         
@@ -1181,17 +1243,6 @@
                 return false;
             }
             
-            // التحقق من وجود المستخدم المستقبل في Firebase
-            const receiverRef = db.collection('users').doc(targetUserId.toString());
-            const receiverDoc = await receiverRef.get();
-            
-            if (!receiverDoc.exists) {
-                showToast('❌ المستخدم المستقبل غير موجود', 'error');
-                return false;
-            }
-            
-            const receiverData = receiverDoc.data();
-            
             // التحقق من وجود محفظة المستقبل
             const receiverWalletsRef = db.collection('wallets').doc(targetUserId.toString());
             const receiverWalletsDoc = await receiverWalletsRef.get();
@@ -1201,9 +1252,8 @@
                 return false;
             }
             
-            // بدء المعاملة في قاعدة البيانات باستخدام Batch
+            // بدء المعاملة في قاعدة البيانات
             const batch = db.batch();
-            const transactionId = 'tx_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
             const timestamp = firebase.firestore.FieldValue.serverTimestamp();
             
             // 1. تحديث رصيد المرسل (خصم المبلغ)
@@ -1219,73 +1269,6 @@
                 'updatedAt': timestamp
             });
             
-            // 3. إنشاء معاملة للمرسل
-            const senderTransaction = {
-                transactionId: transactionId,
-                userId: currentUser.id,
-                type: 'send',
-                status: 'completed',
-                amount: amount,
-                currency: currency,
-                toUserId: targetUserId,
-                description: description || `إرسال إلى ${targetUserId}`,
-                metadata: {
-                    receiverName: `${receiverData.firstName || ''} ${receiverData.lastName || ''}`.trim() || receiverData.username || 'مستخدم',
-                    senderName: `${currentUser.firstName || ''} ${currentUser.lastName || ''}`.trim() || currentUser.username || 'مستخدم'
-                },
-                fees: {
-                    networkFee: 0,
-                    serviceFee: 0,
-                    totalFee: 0
-                },
-                createdAt: timestamp,
-                completedAt: timestamp
-            };
-            
-            const senderTransactionsRef = db.collection('transactions').doc(transactionId + '_sender');
-            batch.set(senderTransactionsRef, senderTransaction);
-            
-            // 4. إنشاء معاملة للمستقبل
-            const receiverTransaction = {
-                transactionId: transactionId,
-                userId: targetUserId,
-                type: 'receive',
-                status: 'completed',
-                amount: amount,
-                currency: currency,
-                fromUserId: currentUser.id,
-                description: description || `استلام من ${currentUser.id}`,
-                metadata: {
-                    senderName: `${currentUser.firstName || ''} ${currentUser.lastName || ''}`.trim() || currentUser.username || 'مستخدم',
-                    receiverName: `${receiverData.firstName || ''} ${receiverData.lastName || ''}`.trim() || receiverData.username || 'مستخدم'
-                },
-                fees: {
-                    networkFee: 0,
-                    serviceFee: 0,
-                    totalFee: 0
-                },
-                createdAt: timestamp,
-                completedAt: timestamp
-            };
-            
-            const receiverTransactionsRef = db.collection('transactions').doc(transactionId + '_receiver');
-            batch.set(receiverTransactionsRef, receiverTransaction);
-            
-            // 5. تحديث إحصائيات المرسل
-            const senderUserRef = db.collection('users').doc(currentUser.id.toString());
-            batch.update(senderUserRef, {
-                'statistics.totalTransactions': firebase.firestore.FieldValue.increment(1),
-                'statistics.totalVolume': firebase.firestore.FieldValue.increment(amount),
-                'lastLogin': timestamp
-            });
-            
-            // 6. تحديث إحصائيات المستقبل
-            batch.update(receiverRef, {
-                'statistics.totalTransactions': firebase.firestore.FieldValue.increment(1),
-                'statistics.totalVolume': firebase.firestore.FieldValue.increment(amount),
-                'lastLogin': timestamp
-            });
-            
             // تنفيذ جميع العمليات معاً
             await batch.commit();
             
@@ -1294,47 +1277,6 @@
             
             // تحديث التخزين المحلي
             updateLocalUserData();
-            
-            // إرسال إشعار للمستقبل
-            await createNotification(targetUserId, {
-                type: 'money_received',
-                title: 'تم استلام أموال',
-                message: `استلمت ${amount} ${currency} من ${currentUser.id}`,
-                data: {
-                    amount: amount,
-                    currency: currency,
-                    fromUserId: currentUser.id,
-                    transactionId: transactionId
-                }
-            });
-            
-            // إشعار للمرسل
-            await createNotification(currentUser.id, {
-                type: 'money_sent',
-                title: 'تم إرسال الأموال',
-                message: `تم إرسال ${amount} ${currency} إلى ${targetUserId}`,
-                data: {
-                    amount: amount,
-                    currency: currency,
-                    toUserId: targetUserId,
-                    transactionId: transactionId
-                }
-            });
-            
-            // تسجيل النشاط
-            await logUserActivity(currentUser.id, 'money_sent', `إرسال ${amount} ${currency} إلى ${targetUserId}`, {
-                amount: amount,
-                currency: currency,
-                toUserId: targetUserId,
-                transactionId: transactionId
-            });
-            
-            await logUserActivity(targetUserId, 'money_received', `استلام ${amount} ${currency} من ${currentUser.id}`, {
-                amount: amount,
-                currency: currency,
-                fromUserId: currentUser.id,
-                transactionId: transactionId
-            });
             
             showToast(`✅ تم إرسال ${amount} ${currency} إلى المستخدم ${targetUserId}`, 'success');
             closeSendModal();
@@ -1346,8 +1288,7 @@
             console.log('✅ Money sent successfully:', { 
                 toUserId: targetUserId, 
                 currency, 
-                amount,
-                transactionId 
+                amount
             });
             
             return true;
@@ -1361,225 +1302,22 @@
         }
     }
 
-    // ========== دوال مساعدة للنظام ==========
-    async function setupCompleteUserSystem(userData) {
-        try {
-            // 1. التحقق من وجود المستخدم أو إنشائه
-            const userExists = await checkOrCreateUser(userData);
-            
-            if (userExists) {
-                // 2. تحديث سجل النشاط
-                await logUserActivity(userData.id, 'wallet_login', 'تم تسجيل الدخول إلى المحفظة');
-                
-                // 3. التحقق من إنشاء المحفظة
-                await initializeUserWallets(userData.id);
-                
-                // 4. تحميل البيانات
-                await loadUserCompleteData(userData.id);
-            }
-            
-            await fetchLivePrices();
-            
-        } catch (error) {
-            console.error('❌ Error in complete user system:', error);
-            throw error;
-        }
-    }
-
-    async function checkOrCreateUser(userData) {
-        try {
-            const userRef = db.collection('users').doc(userData.id.toString());
-            const userDoc = await userRef.get();
-            
-            if (!userDoc.exists) {
-                // إنشاء مستخدم جديد
-                const newUser = {
-                    userId: userData.id,
-                    firstName: userData.first_name || 'مستخدم',
-                    lastName: userData.last_name || '',
-                    username: userData.username || null,
-                    languageCode: userData.language_code || 'ar',
-                    registrationDate: firebase.firestore.FieldValue.serverTimestamp(),
-                    lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
-                    loginCount: 1,
-                    status: 'active'
-                };
-                
-                await userRef.set(newUser);
-                console.log('✅ New user created in Firebase:', userData.id);
-                
-                // إنشاء السجلات المرتبطة
-                await createUserWallets(userData.id);
-                await createUserNotifications(userData.id);
-                
-                return true;
-            } else {
-                // تحديث المستخدم الحالي
-                await userRef.update({
-                    lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
-                    loginCount: firebase.firestore.FieldValue.increment(1)
-                });
-                
-                console.log('✅ Existing user logged in:', userData.id);
-                return true;
-            }
-            
-        } catch (error) {
-            console.error('❌ Error in user creation:', error);
-            throw error;
-        }
-    }
-
-    async function createUserWallets(userId) {
-        try {
-            const walletsRef = db.collection('wallets').doc(userId.toString());
-            
-            const userWallets = {
-                userId: userId,
-                balances: { ...defaultBalances },
-                totalBalanceUSD: 0,
-                currencies: Object.keys(defaultBalances),
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                status: 'active'
-            };
-            
-            await walletsRef.set(userWallets);
-            console.log('✅ User wallets created:', userId);
-            
-        } catch (error) {
-            console.error('❌ Error creating wallets:', error);
-            throw error;
-        }
-    }
-
-    async function createUserNotifications(userId) {
-        try {
-            const notificationsRef = db.collection('notifications').doc(userId.toString());
-            
-            const initialNotifications = {
-                userId: userId,
-                notifications: [],
-                unreadCount: 0,
-                lastChecked: firebase.firestore.FieldValue.serverTimestamp()
-            };
-            
-            await notificationsRef.set(initialNotifications);
-            console.log('✅ User notifications initialized:', userId);
-            
-        } catch (error) {
-            console.error('❌ Error creating notifications:', error);
-            throw error;
-        }
-    }
-
-    async function createNotification(userId, notificationData) {
-        try {
-            const notificationsRef = db.collection('notifications').doc(userId.toString());
-            
-            const notification = {
-                id: generateNotificationId(),
-                type: notificationData.type,
-                title: notificationData.title,
-                message: notificationData.message,
-                isRead: false,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                data: notificationData.data || {}
-            };
-            
-            await notificationsRef.update({
-                notifications: firebase.firestore.FieldValue.arrayUnion(notification),
-                unreadCount: firebase.firestore.FieldValue.increment(1)
-            });
-            
-        } catch (error) {
-            console.error('❌ Error creating notification:', error);
-        }
-    }
-
-    async function logUserActivity(userId, action, description, metadata = {}) {
-        try {
-            const activityRef = db.collection('activityLogs').doc();
-            
-            const activityLog = {
-                logId: activityRef.id,
-                userId: userId,
-                action: action,
-                description: description,
-                metadata: metadata,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            };
-            
-            await activityRef.set(activityLog);
-            
-        } catch (error) {
-            console.error('❌ Error logging activity:', error);
-        }
-    }
-
-    async function loadUserCompleteData(userId) {
-        try {
-            // تحميل بيانات المستخدم
-            const userRef = db.collection('users').doc(userId.toString());
-            const userDoc = await userRef.get();
-            
-            if (userDoc.exists) {
-                const userData = userDoc.data();
-                currentUser = {
-                    id: userData.userId,
-                    firstName: userData.firstName,
-                    lastName: userData.lastName,
-                    username: userData.username
-                };
-            }
-            
-            // تحميل بيانات المحفظة
-            const walletsRef = db.collection('wallets').doc(userId.toString());
-            const walletsDoc = await walletsRef.get();
-            
-            if (walletsDoc.exists) {
-                const walletsData = walletsDoc.data();
-                userBalances = walletsData.balances || { ...defaultBalances };
-            }
-            
-            // تحديث الواجهة
-            updateUserInterface(currentUser);
-            updateWalletsListRealTime();
-            updateTotalBalance();
-            
-        } catch (error) {
-            console.error('❌ Error loading complete user data:', error);
-            throw error;
-        }
-    }
-
-    async function initializeUserWallets(userId) {
-        try {
-            const walletsRef = db.collection('wallets').doc(userId.toString());
-            const walletsDoc = await walletsRef.get();
-            
-            if (!walletsDoc.exists) {
-                await createUserWallets(userId);
-            }
-            
-        } catch (error) {
-            console.error('❌ Error initializing wallets:', error);
-            throw error;
-        }
-    }
-
-    // ========== دوال إدارة Firebase ==========
+    // ========== دوال إدارة Firebase المبسطة ==========
     async function testFirebaseConnection() {
         try {
             if (!db) {
                 throw new Error('Firebase not initialized');
             }
 
-            const testRef = db.collection('connectionTest').doc('walletApp');
+            // اختبار بسيط للاتصال
+            const testRef = db.collection('wallets').doc('connection_test');
             await testRef.set({
-                status: 'connected',
+                test: true,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
+            
+            // تنظيف الاختبار
+            await testRef.delete();
             
             return true;
         } catch (error) {
@@ -1613,35 +1351,6 @@
         } catch (error) {
             console.error('❌ Error updating balances in Firebase:', error);
             return false;
-        }
-    }
-
-    // تسجيل المعاملة
-    async function logTransaction(transactionData) {
-        try {
-            if (!db || !currentUser.id) return;
-
-            const transactionId = 'conv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-            const transactionsRef = db.collection('transactions').doc(transactionId);
-            
-            const transaction = {
-                transactionId: transactionId,
-                userId: currentUser.id,
-                type: 'conversion',
-                status: 'completed',
-                fromCurrency: transactionData.fromCurrency,
-                toCurrency: transactionData.toCurrency,
-                fromAmount: transactionData.amount,
-                toAmount: transactionData.convertedAmount,
-                exchangeRate: transactionData.rate,
-                description: `تحويل ${transactionData.amount} ${transactionData.fromCurrency} إلى ${transactionData.toCurrency}`,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            };
-            
-            await transactionsRef.set(transaction);
-            
-        } catch (error) {
-            console.error('❌ Error logging transaction:', error);
         }
     }
 
@@ -1778,7 +1487,7 @@
                 if (user && user.id) {
                     document.getElementById('telegramStatus').style.display = 'block';
                     
-                    // تهيئة النظام الكامل
+                    // تهيئة النظام المبسط
                     await initializeUserSystem(user);
                     
                 } else {
@@ -1837,10 +1546,6 @@
             'USDT': '#26a17b, #4cd4a7'
         };
         return colors[symbol] || '#0072ff, #ff2d9e';
-    }
-
-    function generateNotificationId() {
-        return 'notif_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
     }
 
     // ========== دوال الواجهة ==========
@@ -1936,8 +1641,11 @@
     }
 
     function updateUserInterface(userData) {
-        const userName = userData.firstName + (userData.lastName ? ' ' + userData.lastName : '');
-        document.getElementById('walletUserName').textContent = userName;
+        const userName = userData.first_name || userData.firstName || 'مستخدم';
+        const userLastName = userData.last_name || userData.lastName || '';
+        const fullName = userName + (userLastName ? ' ' + userLastName : '');
+        
+        document.getElementById('walletUserName').textContent = fullName;
         document.getElementById('walletUserId').textContent = `id: ${userData.id}`;
         document.getElementById('walletUserId').setAttribute('onclick', `copyUserId(${userData.id})`);
         
@@ -2105,34 +1813,22 @@
                 return;
             }
             
-            const userRef = db.collection('users').doc(targetUserId);
-            const userDoc = await userRef.get();
+            // التحقق من وجود محفظة المستقبل فقط
+            const walletsRef = db.collection('wallets').doc(targetUserId);
+            const walletsDoc = await walletsRef.get();
             
-            if (userDoc.exists) {
-                const userData = userDoc.data();
-                const userName = `${userData.firstName || ''} ${userData.lastName || ''}`.trim() || userData.username || 'مستخدم';
-                
-                // التحقق من وجود المحفظة
-                const walletsRef = db.collection('wallets').doc(targetUserId);
-                const walletsDoc = await walletsRef.get();
-                
-                if (walletsDoc.exists) {
-                    resultElement.innerHTML = `
-                    ✅ تم العثور على المستخدم
-                    <div style="font-size:12px; margin-top:5px;">
-                        الاسم: ${userName}<br>
-                        المعرف: ${targetUserId}<br>
-                        الحالة: ✅ محفظة نشطة
-                    </div>
-                    `;
-                    resultElement.className = 'user-search-result found';
-                } else {
-                    resultElement.innerHTML = '⚠️ المستخدم موجود لكن المحفظة غير نشطة';
-                    resultElement.className = 'user-search-result not-found';
-                }
+            if (walletsDoc.exists) {
+                resultElement.innerHTML = `
+                ✅ تم العثور على محفظة المستخدم
+                <div style="font-size:12px; margin-top:5px;">
+                    المعرف: ${targetUserId}<br>
+                    الحالة: ✅ محفظة نشطة
+                </div>
+                `;
+                resultElement.className = 'user-search-result found';
                 resultElement.style.display = 'block';
             } else {
-                resultElement.innerHTML = '❌ لم يتم العثور على المستخدم';
+                resultElement.innerHTML = '❌ لم يتم العثور على محفظة المستخدم';
                 resultElement.className = 'user-search-result not-found';
                 resultElement.style.display = 'block';
             }
