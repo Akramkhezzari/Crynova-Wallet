@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>المحفظة الرقمية - Zestara</title>
+  <title>المحفظة الرقمية - Crynova Wallet</title>
   
   <!-- إضافة Telegram Web App SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -697,7 +697,7 @@
       <div class="wallet-header">
         <div class="wallet-brand">
           <div class="wallet-avatar">
-            <div class="wallet-coin-icon" id="walletCoinIcon">Z</div>
+            <div class="wallet-coin-icon" id="walletCoinIcon">C</div>
           </div>
           <div class="wallet-user-meta">
             <div class="name" id="walletUserName">جاري التحميل...</div>
@@ -790,7 +790,7 @@
           </div>
         </div>
 
-        <div class="wallet-smallnote">© 2025 Zestara — الأسعار من CoinGecko</div>
+        <div class="wallet-smallnote">© 2025 Crynova Wallet — الأسعار من CoinGecko</div>
       </div>
     </div>
 
@@ -913,7 +913,7 @@
       username: null
     };
 
-    // معلومات العملات الرقمية
+    // معلومات العملات الرقمية - تم تغيير ZST إلى Crynova
     const coinInfo = {
       'BTC': { name: 'Bitcoin', icon: '฿', cmcId: 1 },
       'ETH': { name: 'Ethereum', icon: 'Ξ', cmcId: 1027 },
@@ -923,11 +923,11 @@
       'SOL': { name: 'Solana', icon: 'S', cmcId: 5426 },
       'DOT': { name: 'Polkadot', icon: 'D', cmcId: 6636 },
       'DOGE': { name: 'Dogecoin', icon: 'Ð', cmcId: 74 },
-      'ZST': { name: 'Zestara Coin', icon: 'Z', price: 0.0002, change: 0.0 },
+      'Crynova': { name: 'Crynova Coin', icon: 'C', price: 0.0002, change: 0.0 },
       'USDT': { name: 'Tether', icon: '＄', price: 1.00, change: 0.0 }
     };
 
-    // أرصدة افتراضية للمستخدمين الجدد
+    // أرصدة افتراضية للمستخدمين الجدد - تم تغيير ZST إلى Crynova
     const defaultBalances = {
       'BTC': 0.0000,
       'ETH': 0.0000,
@@ -937,7 +937,7 @@
       'SOL': 0.0000,
       'DOT': 0.0000,
       'DOGE': 0.0000,
-      'ZST': 1.0000,
+      'Crynova': 1.0000,
       'USDT': 0.0000
     };
 
@@ -1118,7 +1118,7 @@
         // الحد الأدنى للتحويل
         const minAmounts = {
             'BTC': 0.00001, 'ETH': 0.0001, 'USDT': 0.1, 
-            'ZST': 0.01, 'BNB': 0.001, 'XRP': 0.1,
+            'Crynova': 0.01, 'BNB': 0.001, 'XRP': 0.1,
             'ADA': 0.1, 'SOL': 0.001, 'DOT': 0.01, 'DOGE': 1
         };
         
@@ -1167,7 +1167,7 @@
                 'BTC': 0.0001,
                 'ETH': 0.001,
                 'USDT': 1,
-                'ZST': 0.1,
+                'Crynova': 0.1,
                 'BNB': 0.01,
                 'XRP': 1,
                 'ADA': 1,
@@ -1714,7 +1714,7 @@
                 'DOT': { price: data.polkadot.usd, change: data.polkadot.usd_24h_change },
                 'DOGE': { price: data.dogecoin.usd, change: data.dogecoin.usd_24h_change },
                 'USDT': { price: data.tether.usd, change: data.tether.usd_24h_change },
-                'ZST': { price: 0.0002, change: 0.0 }
+                'Crynova': { price: 0.0002, change: 0.0 }
             };
             
             updateAllExchangeRates();
@@ -1739,7 +1739,7 @@
             'DOT': { price: 6.90, change: 0.9 },
             'DOGE': { price: 0.12, change: -1.5 },
             'USDT': { price: 1.00, change: 0.0 },
-            'ZST': { price: 0.0002, change: 0.0 }
+            'Crynova': { price: 0.0002, change: 0.0 }
         };
         
         updateAllExchangeRates();
@@ -1833,7 +1833,7 @@
             'SOL': '#00ffbd, #66ffd1',
             'DOT': '#e6007a, #ff4da6',
             'DOGE': '#c2a633, #e6d16c',
-            'ZST': '#0072ff, #ff2d9e',
+            'Crynova': '#0072ff, #ff2d9e',
             'USDT': '#26a17b, #4cd4a7'
         };
         return colors[symbol] || '#0072ff, #ff2d9e';
@@ -2146,7 +2146,7 @@
 
     // ========== التهيئة النهائية ==========
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('🚀 Initializing Wallet System...');
+        console.log('🚀 Initializing Crynova Wallet System...');
         
         // تهيئة Telegram WebApp
         initializeTelegramWebApp();
