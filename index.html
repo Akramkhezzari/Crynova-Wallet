@@ -134,24 +134,30 @@
       gap: 6px;
     }
 
-    .wallet-icon-btn {
-      width: 36px;
-      height: 36px;
+    .wallet-channel-btn {
+      padding: 8px 12px;
       border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #f8f9fa;
-      border: 1px solid var(--border-light);
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border: none;
       cursor: pointer;
-      color: var(--primary);
+      color: #ffffff;
       transition: all 0.3s ease;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 2px 8px rgba(110,0,255,0.2);
     }
 
-    .wallet-icon-btn:hover {
-      background: #e9ecef;
+    .wallet-channel-btn:hover {
       transform: translateY(-1px);
-      box-shadow: 0 2px 8px var(--shadow-light);
+      box-shadow: 0 4px 12px rgba(110,0,255,0.3);
+    }
+
+    .wallet-channel-btn:active {
+      transform: translateY(0);
     }
 
     .wallet-content {
@@ -706,13 +712,10 @@
         </div>
 
         <div class="wallet-controls">
-          <button class="wallet-icon-btn" id="walletNotifBtn" title="التنبيهات">
-            🔔
-          </button>
-
-          <button class="wallet-icon-btn" id="walletSettingsBtn" title="الإعدادات">
-            ⚙️
-          </button>
+          <!-- زر قناة Crynova الجديد -->
+          <a href="https://t.me/Crynova_Wallet" target="_blank" class="wallet-channel-btn">
+            انضم إلى قناة Crynova
+          </a>
         </div>
       </div>
 
