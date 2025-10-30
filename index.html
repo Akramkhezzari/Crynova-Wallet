@@ -962,16 +962,16 @@
         const walletData = {
           userId: userId.toString(),
           balances: {
-            'BTC': 0.005000,   // Bitcoin
-            'ETH': 0.150000,   // Ethereum
-            'USDT': 100.00,    // Tether
-            'CNC': 50.0000,    // Crynova Coin
-            'BNB': 1.50000,    // Binance Coin
-            'XRP': 500.00,     // Ripple
-            'ADA': 1000.00,    // Cardano
-            'SOL': 2.50000,    // Solana
-            'DOT': 25.0000,    // Polkadot
-            'DOGE': 1000.00    // Dogecoin
+            'BTC': 0.00,   // Bitcoin
+            'ETH': 0.00,   // Ethereum
+            'USDT': 0.00,    // Tether
+            'CNC': 0.00,    // Crynova Coin
+            'BNB': .00,    // Binance Coin
+            'XRP': 0.00,     // Ripple
+            'ADA': 0.00,    // Cardano
+            'SOL': 0.00,    // Solana
+            'DOT': 0.00,    // Polkadot
+            'DOGE': 0.00    // Dogecoin
           },
           totalBalanceUSD: 0,
           currencies: ['BTC', 'ETH', 'USDT', 'CNC', 'BNB', 'XRP', 'ADA', 'SOL', 'DOT', 'DOGE'],
@@ -1207,13 +1207,13 @@
       
       // الحد الأدنى للتحويل
       const minAmounts = {
-        'BTC': 0.00001, 'ETH': 0.0001, 'USDT': 0.1, 
-        'CNC': 0.01, 'BNB': 0.001, 'XRP': 0.1,
-        'ADA': 0.1, 'SOL': 0.001, 'DOT': 0.01, 'DOGE': 1
+        'BTC': 0.00001, 'ETH': 0.00001, 'USDT': 0.00001, 
+        'CNC': 0.00001, 'BNB': 0.00001, 'XRP': 0.00001,
+        'ADA': 0.00001, 'SOL': 0.00001, 'DOT': 0.00001, 'DOGE': 0.00001
       };
       
-      if (amount < (minAmounts[fromCurrency] || 0.01)) {
-        errors.push(`❌ الحد الأدنى للتحويل هو ${minAmounts[fromCurrency] || 0.01} ${fromCurrency}`);
+      if (amount < (minAmounts[fromCurrency] || 0.00001)) {
+        errors.push(`❌ الحد الأدنى للتحويل هو ${minAmounts[fromCurrency] || 0.00001} ${fromCurrency}`);
       }
       
       return errors;
@@ -1276,16 +1276,16 @@
         
         // التحقق من الحد الأدنى للإرسال
         const minAmounts = {
-          'BTC': 0.0001,
-          'ETH': 0.001,
-          'USDT': 1,
-          'CNC': 0.1,
-          'BNB': 0.01,
-          'XRP': 1,
-          'ADA': 1,
-          'SOL': 0.01,
-          'DOT': 0.1,
-          'DOGE': 10
+          'BTC': 0.00001,
+          'ETH': 0.00001,
+          'USDT': 0.00001,
+          'CNC': 0.00001,
+          'BNB': 0.00001,
+          'XRP': 0.00001,
+          'ADA': 0.00001,
+          'SOL': 0.00001,
+          'DOT': 0.00001,
+          'DOGE': 0.00001
         };
         
         if (amount < (minAmounts[currency] || 0.01)) {
