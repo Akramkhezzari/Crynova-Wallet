@@ -1,1 +1,1 @@
-# Crynova-Wallet
+# Crynova-Wallet - نظام تخزين البيانات على GitHub
