@@ -1089,6 +1089,8 @@
     // أسعار العملات الحية
     let livePrices = {};
     let userBalances = { ...defaultBalances };
+    let priceUpdateInterval = null;
+    let lastPriceUpdateTime = 0;
 
     // ========== نظام إدارة الصفحات ==========
     function showMainPage() {
@@ -1256,28 +1258,121 @@
       }
     }
 
+    // ========== نظام تحديث الأسعار كل ثانية ==========
     async function fetchLivePrices() {
       try {
-        // استخدام أسعار افتراضية للعرض
-        livePrices = {
-          'BTC': { price: 67450, change: 2.3 },
-          'ETH': { price: 3450, change: 1.8 },
-          'BNB': { price: 585, change: 0.5 },
-          'XRP': { price: 0.52, change: -0.3 },
-          'ADA': { price: 0.45, change: 1.2 },
-          'SOL': { price: 165, change: 4.7 },
-          'DOT': { price: 6.90, change: 0.9 },
-          'DOGE': { price: 0.12, change: -1.5 },
-          'USDT': { price: 1.00, change: 0.0 },
-          'CNC': { price: 0.00, change: 0.0 }
+        const now = Date.now();
+        
+        // تجنب التحديثات السريعة جداً
+        if (now - lastPriceUpdateTime < 500) {
+          return;
+        }
+        
+        lastPriceUpdateTime = now;
+        
+        // العملات المطلوبة مع أزواج Binance
+        const binancePairs = {
+          'BTC': 'BTCUSDT',
+          'ETH': 'ETHUSDT',
+          'BNB': 'BNBUSDT',
+          'XRP': 'XRPUSDT',
+          'ADA': 'ADAUSDT',
+          'SOL': 'SOLUSDT',
+          'DOT': 'DOTUSDT',
+          'DOGE': 'DOGEUSDT',
+          'USDT': 'USDT'
         };
         
-        updateWalletsListRealTime();
-        updateTotalBalance();
+        // محاولة جلب الأسعار من Binance API (الأسرع)
+        try {
+          // جلب الأسعار لكل عملة
+          const pricePromises = Object.entries(binancePairs).map(async ([symbol, pair]) => {
+            if (symbol === 'USDT') {
+              return { symbol, price: 1.0, change: 0.0 };
+            }
+            
+            try {
+              // جلب السعر الحالي
+              const priceResponse = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${pair}`);
+              const priceData = await priceResponse.json();
+              const price = parseFloat(priceData.price);
+              
+              // جلب التغير خلال 24 ساعة
+              const changeResponse = await fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${pair}`);
+              const changeData = await changeResponse.json();
+              const change = parseFloat(changeData.priceChangePercent);
+              
+              return { symbol, price, change };
+            } catch (error) {
+              // في حالة الخطأ، استخدام القيم السابقة إن وجدت
+              const previousPrice = livePrices[symbol]?.price || 0;
+              const previousChange = livePrices[symbol]?.change || 0;
+              return { symbol, price: previousPrice, change: previousChange };
+            }
+          });
+          
+          const results = await Promise.allSettled(pricePromises);
+          
+          // تحديث الأسعار من النتائج الناجحة
+          results.forEach(result => {
+            if (result.status === 'fulfilled' && result.value) {
+              const { symbol, price, change } = result.value;
+              livePrices[symbol] = {
+                price: price || 0,
+                change: change || 0
+              };
+            }
+          });
+          
+          // إضافة العملات الخاصة (CNC)
+          livePrices['CNC'] = {
+            price: 0.00,
+            change: 0.0
+          };
+          
+          // تحديث الواجهة
+          updateWalletsListRealTime();
+          updateTotalBalance();
+          
+          // حفظ الأسعار محلياً للاستخدام الاحتياطي
+          localStorage.setItem('crynova_last_prices', JSON.stringify(livePrices));
+          localStorage.setItem('crynova_last_update', new Date().toISOString());
+          
+        } catch (binanceError) {
+          console.log('Binance API فشل، استخدام البيانات المحفوظة...');
+          // استخدام البيانات المخزنة محلياً كاحتياطي
+          const storedPrices = localStorage.getItem('crynova_last_prices');
+          if (storedPrices) {
+            livePrices = JSON.parse(storedPrices);
+            updateWalletsListRealTime();
+            updateTotalBalance();
+          }
+        }
         
       } catch (error) {
-        console.error('❌ Error fetching live prices:', error);
+        console.error('❌ خطأ في تحديث الأسعار:', error);
       }
+    }
+
+    // بدء نظام التحديث التلقائي
+    function startPriceUpdates() {
+      console.log('🚀 بدء تحديث الأسعار كل ثانية...');
+      
+      // إيقاف أي تحديث سابق
+      if (priceUpdateInterval) {
+        clearInterval(priceUpdateInterval);
+      }
+      
+      // تحديث فوري عند البدء
+      fetchLivePrices();
+      
+      // بدء التحديث كل ثانية
+      priceUpdateInterval = setInterval(() => {
+        fetchLivePrices();
+      }, 1000);
+      
+      // تحديث إضافي بعد 3 ثوان للتأكد
+      setTimeout(() => fetchLivePrices(), 3000);
     }
 
     function updateWalletsListRealTime() {
@@ -1512,7 +1607,9 @@
             // تهيئة المحفظة
             await initializeUserWallet(user.id);
             await loadUserWallets(user.id);
-            await fetchLivePrices();
+            
+            // بدء تحديث الأسعار كل ثانية
+            startPriceUpdates();
             
           } else {
             console.log('❌ لم يتم العثور على بيانات المستخدم في Telegram');
@@ -1563,12 +1660,9 @@
       try {
         await initializeUserWallet(userData.id);
         await loadUserWallets(userData.id);
-        await fetchLivePrices();
         
-        // بدء التحديثات التلقائية
-        setInterval(async () => {
-          await fetchLivePrices();
-        }, 30000);
+        // بدء تحديث الأسعار كل ثانية
+        startPriceUpdates();
         
       } catch (error) {
         console.error('❌ Error initializing user system:', error);
@@ -1582,6 +1676,7 @@
       console.log('📊 الأرصدة الحالية:', userBalances);
       console.log('💱 العملة المحددة للإرسال: USDT (ثابتة)');
       console.log('⚠️ زر التحويل: يظهر رسالة "الميزة متوقفة مؤقتًا"');
+      console.log('🔄 نظام تحديث الأسعار: نشط (كل ثانية)');
     }
   </script>
 </body>
