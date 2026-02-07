@@ -1650,7 +1650,7 @@
           </div>
           <div class="wallet-user-meta">
             <div class="name" id="walletUserName">جاري التحميل...</div>
-            <div class="sub" id="walletUserId">id: ...</div>
+            <div class="sub" id="walletUserId" style="display: none;">id: ...</div>
           </div>
         </div>
 
@@ -2488,8 +2488,9 @@
       const fullName = userName + (userLastName ? ' ' + userLastName : '');
       
       document.getElementById('walletUserName').textContent = fullName;
-      document.getElementById('walletUserId').textContent = `id: ${userData.id}`;
-      document.getElementById('walletUserId').setAttribute('onclick', `copyUserId(${userData.id})`);
+      
+      // إخفاء معرف المستخدم كما طلبت
+      document.getElementById('walletUserId').style.display = 'none';
     }
 
     function copyUserId(userId) {
