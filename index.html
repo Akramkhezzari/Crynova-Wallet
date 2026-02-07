@@ -2090,6 +2090,10 @@
     let userBalances = { ...defaultBalances };
     let priceUpdateInterval = null;
     let lastPriceUpdateTime = 0;
+    
+    // متغيرات نظام الفرز
+    let currentSort = 'default';
+    let originalOrder = [];
 
     // ========== نظام إدارة الصفحات ==========
     function showMainPage() {
@@ -2412,6 +2416,8 @@
       
       walletsList.innerHTML = '';
       
+      originalOrder = [];
+      
       Object.entries(coinInfo).forEach(([symbol, info]) => {
         const balance = userBalances[symbol] || 0;
         const liveData = livePrices[symbol];
@@ -2421,9 +2427,19 @@
         const usdValue = balance * liveData.price;
         const changeClass = liveData.change >= 0 ? 'positive' : 'negative';
         const changeIcon = liveData.change >= 0 ? '↗' : '↘';
+        
+        originalOrder.push({
+          symbol: symbol,
+          change: liveData.change,
+          element: null
+        });
 
         const walletElement = document.createElement('div');
         walletElement.className = 'wallet-coin-row';
+        walletElement.setAttribute('data-symbol', symbol);
+        walletElement.setAttribute('data-change', liveData.change);
+        walletElement.setAttribute('data-value', usdValue);
+        
         walletElement.innerHTML = `
         <div class="wallet-coin-left">
           <div class="wallet-badge">
@@ -2446,6 +2462,59 @@
         </div>
         `;
         walletsList.appendChild(walletElement);
+      });
+      
+      // تطبيق الفرز الحالي
+      applySort(currentSort);
+    }
+
+    function applySort(sortType) {
+      const walletsList = document.getElementById('walletWalletsList');
+      if (!walletsList) return;
+      
+      const rows = Array.from(walletsList.querySelectorAll('.wallet-coin-row'));
+      
+      if (rows.length === 0) return;
+      
+      switch(sortType) {
+        case 'value-high':
+          // الأعلى قيمة حسب نسبة التغيير (من الأعلى إلى الأدنى)
+          rows.sort((a, b) => {
+            const aChange = parseFloat(a.getAttribute('data-change')) || 0;
+            const bChange = parseFloat(b.getAttribute('data-change')) || 0;
+            return bChange - aChange; // تنازلي حسب التغيير
+          });
+          break;
+          
+        case 'value-low':
+          // الأقل قيمة حسب نسبة التغيير (من الأدنى إلى الأعلى)
+          rows.sort((a, b) => {
+            const aChange = parseFloat(a.getAttribute('data-change')) || 0;
+            const bChange = parseFloat(b.getAttribute('data-change')) || 0;
+            return aChange - bChange; // تصاعدي حسب التغيير
+          });
+          break;
+          
+        case 'default':
+          // الترتيب الافتراضي حسب ترتيب coinInfo
+          const symbolOrder = Object.keys(coinInfo);
+          rows.sort((a, b) => {
+            const aSymbol = a.getAttribute('data-symbol');
+            const bSymbol = b.getAttribute('data-symbol');
+            return symbolOrder.indexOf(aSymbol) - symbolOrder.indexOf(bSymbol);
+          });
+          break;
+      }
+      
+      // إعادة ترتيب الصفوف في القائمة
+      rows.forEach(row => walletsList.appendChild(row));
+      
+      // تحديث حالة الأزرار
+      document.querySelectorAll('.wallet-sort-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('data-sort') === sortType) {
+          btn.classList.add('active');
+        }
       });
     }
 
@@ -3570,6 +3639,15 @@
       document.getElementById('walletTradeBtn').addEventListener('click', showTradingPage);
       document.getElementById('tradingBackBtn').addEventListener('click', showMainPage);
       
+      // إضافة أحداث لأزرار الفرز
+      document.querySelectorAll('.wallet-sort-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const sortType = this.getAttribute('data-sort');
+          currentSort = sortType;
+          applySort(sortType);
+        });
+      });
+      
       // تهيئة Telegram WebApp
       initializeTelegramWebApp();
       
@@ -3677,6 +3755,7 @@
       console.log('💱 العملة المحددة للإرسال: USDT (ثابتة)');
       console.log('📈 منصة التداول: جاهزة');
       console.log('🔄 نظام تحديث الأسعار: نشط (كل ثانية)');
+      console.log('🔢 نظام الفرز: جاهز (الافتراضي، الأعلى قيمة، الأقل قيمة)');
     }
   </script>
 </body>
