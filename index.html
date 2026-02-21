@@ -51,7 +51,7 @@
 
     /* ========== صفحة المحفظة الرقمية الرئيسية ========== */
     .wallet-page {
-      padding: 15px 15px 70px;
+      padding: 15px;
       background: #ffffff;
       min-height: 100vh;
       display: block;
@@ -1637,179 +1637,6 @@
         padding: 6px 2px;
       }
     }
-
-    /* ========== الشريط السفلي الثابت - تصميم عصري ========== */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background-color: #ffffff;
-      backdrop-filter: blur(10px);
-      border-top: 1px solid rgba(0, 0, 0, 0.08);
-      box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.08);
-      display: flex;
-      justify-content: space-around;
-      padding: 8px 0;
-      z-index: 1000;
-      gap: 5px;
-      max-width: 800px;
-      margin: 0 auto;
-      border-radius: 25px 25px 0 0;
-      border-left: 1px solid rgba(0, 0, 0, 0.05);
-      border-right: 1px solid rgba(0, 0, 0, 0.05);
-      height: 60px;
-    }
-
-    .bottom-nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 6px 8px;
-      border-radius: 16px;
-      cursor: pointer;
-      text-decoration: none;
-      min-width: 70px;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      position: relative;
-      overflow: hidden;
-      background: transparent;
-      height: 52px;
-    }
-
-    .bottom-nav-item::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, rgba(0, 114, 255, 0.05), rgba(255, 45, 158, 0.05));
-      border-radius: 16px;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .bottom-nav-item:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 114, 255, 0.1);
-    }
-
-    .bottom-nav-item.active {
-      background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 6px 15px rgba(0, 114, 255, 0.15);
-      transform: translateY(-3px);
-      border: 1px solid rgba(0, 114, 255, 0.1);
-    }
-
-    .bottom-nav-item.active::before {
-      opacity: 0.5;
-    }
-
-    .bottom-nav-text {
-      font-size: 12px;
-      font-weight: 600;
-      text-align: center;
-      position: relative;
-      z-index: 1;
-      transition: all 0.3s ease;
-      letter-spacing: 0.3px;
-      background: linear-gradient(90deg, #0072ff, #ff2d9e);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-top: 2px;
-    }
-
-    .bottom-nav-item:hover .bottom-nav-text {
-      font-weight: 700;
-      background: linear-gradient(90deg, #0052cc, #e61e8a);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .bottom-nav-item.active .bottom-nav-text {
-      font-weight: 800;
-      font-size: 13px;
-      background: linear-gradient(90deg, #0052cc, #e61e8a);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-shadow: 0 2px 4px rgba(0, 82, 204, 0.1);
-    }
-
-    /* مؤشر النشاط */
-    .bottom-nav-item::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 2px;
-      background: linear-gradient(90deg, #0072ff, #ff2d9e);
-      border-radius: 2px;
-      transition: all 0.3s ease;
-    }
-
-    .bottom-nav-item.active::after {
-      width: 40%;
-      bottom: -2px;
-      box-shadow: 0 1px 4px rgba(0, 114, 255, 0.3);
-    }
-
-    /* عدادات الإشعارات - تصميم جديد */
-    .nav-badge {
-      display: none !important;
-    }
-
-    /* الأيقونات */
-    .nav-icon {
-      font-size: 18px;
-      margin-bottom: 2px;
-      position: relative;
-      z-index: 1;
-      background: linear-gradient(90deg, #0072ff, #ff2d9e);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .bottom-nav-item.active .nav-icon {
-      background: linear-gradient(90deg, #0052cc, #e61e8a);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    /* تجاوبية للشاشات الصغيرة */
-    @media (max-width: 480px) {
-      .bottom-nav {
-        padding: 6px 0;
-        height: 56px;
-      }
-      
-      .bottom-nav-item {
-        padding: 5px 6px;
-        min-width: 60px;
-        height: 48px;
-        border-radius: 14px;
-      }
-      
-      .bottom-nav-text {
-        font-size: 10px;
-      }
-      
-      .nav-icon {
-        font-size: 16px;
-      }
-      
-      .bottom-nav-item.active .bottom-nav-text {
-        font-size: 11px;
-      }
-    }
   </style>
 </head>
 <body>
@@ -1889,6 +1716,7 @@
           </div>
         </div>
 
+        <div class="wallet-smallnote">© 2025 Crynova — الأسعار من CoinGecko</div>
       </div>
     </div>
   </div>
@@ -2189,29 +2017,6 @@
     </div>
   </div>
 
-  <!-- ========== الشريط السفلي الثابت - تصميم جديد ========== -->
-  <div class="bottom-nav" id="bottomNav">
-    <div class="bottom-nav-item active" data-page="main">
-      <div class="nav-icon">🏠</div>
-      <div class="bottom-nav-text">الرئيسية</div>
-    </div>
-    
-    <a href="https://akramkhezzari.github.io/Crynova-Wallet-Tasks/" class="bottom-nav-item">
-      <div class="nav-icon">✅</div>
-      <div class="bottom-nav-text">المهام</div>
-    </a>
-    
-    <a href="https://akramkhezzari.github.io/Crynova-Wallet-Referrals/" class="bottom-nav-item">
-      <div class="nav-icon">👥</div>
-      <div class="bottom-nav-text">الإحالات</div>
-    </a>
-    
-    <a href="https://akramkhezzari.github.io/Crynova-Wallet-Visa/" class="bottom-nav-item">
-      <div class="nav-icon">💳</div>
-      <div class="bottom-nav-text">Visa</div>
-    </a>
-  </div>
-
   <!-- Loading Spinner -->
   <div class="wallet-loading-spinner" id="walletLoadingSpinner">
     <div class="wallet-spinner"></div>
@@ -2318,7 +2123,6 @@
       document.getElementById('receivePage').classList.remove('active');
       document.getElementById('sendPage').classList.remove('active');
       document.getElementById('tradingPage').classList.remove('active');
-      showBottomNav();
     }
 
     function showReceivePage() {
@@ -2326,7 +2130,8 @@
       document.getElementById('receivePage').classList.add('active');
       document.getElementById('sendPage').classList.remove('active');
       document.getElementById('tradingPage').classList.remove('active');
-      hideBottomNav();
+      
+      // تحديث بيانات صفحة الاستلام
       updateReceivePageData();
     }
 
@@ -2335,7 +2140,8 @@
       document.getElementById('receivePage').classList.remove('active');
       document.getElementById('sendPage').classList.add('active');
       document.getElementById('tradingPage').classList.remove('active');
-      hideBottomNav();
+      
+      // تحديث بيانات صفحة الإرسال
       updateSendPageData();
     }
 
@@ -2344,7 +2150,8 @@
       document.getElementById('receivePage').classList.remove('active');
       document.getElementById('sendPage').classList.remove('active');
       document.getElementById('tradingPage').classList.add('active');
-      hideBottomNav();
+      
+      // تهيئة صفحة التداول عند عرضها
       initializeTradingPage();
     }
 
@@ -2355,6 +2162,11 @@
 
     // ========== تحديث صفحة الإرسال ==========
     function updateSendPageData() {
+      // تحديث عرض رصيد USDT في البطاقة الصغيرة
+      updateUSDTBalanceDisplay();
+    }
+
+    function updateUSDTBalanceDisplay() {
       const usdtBalance = userBalances['USDT'] || 0;
       const balanceElement = document.getElementById('usdtBalanceDisplay');
       
@@ -2426,20 +2238,6 @@
       }
     }
 
-    function hideBottomNav() {
-      const bottomNav = document.getElementById('bottomNav');
-      if (bottomNav) {
-        bottomNav.style.display = 'none';
-      }
-    }
-
-    function showBottomNav() {
-      const bottomNav = document.getElementById('bottomNav');
-      if (bottomNav) {
-        bottomNav.style.display = 'flex';
-      }
-    }
-
     // ========== دوال المحفظة الأساسية ==========
     async function initializeUserWallet(userId) {
       try {
@@ -2500,12 +2298,14 @@
       try {
         const now = Date.now();
         
+        // تجنب التحديثات السريعة جداً
         if (now - lastPriceUpdateTime < 500) {
           return;
         }
         
         lastPriceUpdateTime = now;
         
+        // جلب أسعار جميع العملات المتاحة
         const coinSymbols = Object.keys(coinInfo).filter(symbol => symbol !== 'USDT' && symbol !== 'CNC');
         const binancePairs = {
           'BTC': 'BTCUSDT',
@@ -2518,7 +2318,9 @@
           'DOGE': 'DOGEUSDT'
         };
         
+        // محاولة جلب الأسعار من Binance API
         try {
+          // جلب الأسعار لكل عملة
           const pricePromises = coinSymbols.map(async (symbol) => {
             if (symbol === 'USDT' || symbol === 'CNC') {
               return { symbol, price: symbol === 'USDT' ? 1.0 : 0.00, change: 0.0 };
@@ -2526,21 +2328,25 @@
             
             if (binancePairs[symbol]) {
               try {
+                // جلب السعر الحالي
                 const priceResponse = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${binancePairs[symbol]}`);
                 const priceData = await priceResponse.json();
                 const price = parseFloat(priceData.price);
                 
+                // جلب التغير خلال 24 ساعة
                 const changeResponse = await fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${binancePairs[symbol]}`);
                 const changeData = await changeResponse.json();
                 const change = parseFloat(changeData.priceChangePercent);
                 
                 return { symbol, price, change };
               } catch (error) {
+                // في حالة الخطأ، استخدام القيم السابقة إن وجدت
                 const previousPrice = livePrices[symbol]?.price || 0;
                 const previousChange = livePrices[symbol]?.change || 0;
                 return { symbol, price: previousPrice, change: previousChange };
               }
             } else {
+              // للعملات غير المتوفرة في Binance
               const previousPrice = livePrices[symbol]?.price || 0;
               const previousChange = livePrices[symbol]?.change || 0;
               return { symbol, price: previousPrice, change: previousChange };
@@ -2549,6 +2355,7 @@
           
           const results = await Promise.allSettled(pricePromises);
           
+          // تحديث الأسعار من النتائج الناجحة
           results.forEach(result => {
             if (result.status === 'fulfilled' && result.value) {
               const { symbol, price, change } = result.value;
@@ -2559,8 +2366,9 @@
             }
           });
           
+          // إضافة العملات الخاصة (CNC, USDT)
           livePrices['CNC'] = {
-            price: 0.50,
+            price: 0.50, // سعر CNC افتراضي
             change: 0.0
           };
           
@@ -2569,20 +2377,24 @@
             change: 0.0
           };
           
+          // تحديث الواجهة
           updateWalletsListRealTime();
           updateTotalBalance();
           
+          // تحديث صفحة التداول إذا كانت نشطة
           if (document.getElementById('tradingPage').classList.contains('active')) {
             updateTradingPrices();
             updateMainPair(activePair);
             updateTotalCost();
           }
           
+          // حفظ الأسعار محلياً للاستخدام الاحتياطي
           localStorage.setItem('crynova_last_prices', JSON.stringify(livePrices));
           localStorage.setItem('crynova_last_update', new Date().toISOString());
           
         } catch (binanceError) {
           console.log('Binance API فشل، استخدام البيانات المحفوظة...');
+          // استخدام البيانات المخزنة محلياً كاحتياطي
           const storedPrices = localStorage.getItem('crynova_last_prices');
           if (storedPrices) {
             livePrices = JSON.parse(storedPrices);
@@ -2596,19 +2408,24 @@
       }
     }
 
+    // بدء نظام التحديث التلقائي
     function startPriceUpdates() {
       console.log('🚀 بدء تحديث الأسعار كل ثانية...');
       
+      // إيقاف أي تحديث سابق
       if (priceUpdateInterval) {
         clearInterval(priceUpdateInterval);
       }
       
+      // تحديث فوري عند البدء
       fetchLivePrices();
       
+      // بدء التحديث كل ثانية
       priceUpdateInterval = setInterval(() => {
         fetchLivePrices();
       }, 1000);
       
+      // تحديث إضافي بعد 3 ثوان للتأكد
       setTimeout(() => fetchLivePrices(), 3000);
     }
 
@@ -2666,6 +2483,7 @@
         walletsList.appendChild(walletElement);
       });
       
+      // تطبيق الفرز الحالي
       applySort(currentSort);
     }
 
@@ -2679,22 +2497,25 @@
       
       switch(sortType) {
         case 'value-high':
+          // الأعلى قيمة حسب نسبة التغيير (من الأعلى إلى الأدنى)
           rows.sort((a, b) => {
             const aChange = parseFloat(a.getAttribute('data-change')) || 0;
             const bChange = parseFloat(b.getAttribute('data-change')) || 0;
-            return bChange - aChange;
+            return bChange - aChange; // تنازلي حسب التغيير
           });
           break;
           
         case 'value-low':
+          // الأقل قيمة حسب نسبة التغيير (من الأدنى إلى الأعلى)
           rows.sort((a, b) => {
             const aChange = parseFloat(a.getAttribute('data-change')) || 0;
             const bChange = parseFloat(b.getAttribute('data-change')) || 0;
-            return aChange - bChange;
+            return aChange - bChange; // تصاعدي حسب التغيير
           });
           break;
           
         case 'default':
+          // الترتيب الافتراضي حسب ترتيب coinInfo
           const symbolOrder = Object.keys(coinInfo);
           rows.sort((a, b) => {
             const aSymbol = a.getAttribute('data-symbol');
@@ -2704,8 +2525,10 @@
           break;
       }
       
+      // إعادة ترتيب الصفوف في القائمة
       rows.forEach(row => walletsList.appendChild(row));
       
+      // تحديث حالة الأزرار
       document.querySelectorAll('.wallet-sort-btn').forEach(btn => {
         btn.classList.remove('active');
         if (btn.getAttribute('data-sort') === sortType) {
@@ -2753,7 +2576,13 @@
       const fullName = userName + (userLastName ? ' ' + userLastName : '');
       
       document.getElementById('walletUserName').textContent = fullName;
+      
+      // إخفاء معرف المستخدم كما طلبت
       document.getElementById('walletUserId').style.display = 'none';
+    }
+
+    function copyUserId(userId) {
+      copyText(userId.toString(), 'معرف المستخدم');
     }
 
     // ========== البحث عن مستخدم ==========
@@ -2765,6 +2594,7 @@
         return;
       }
       
+      // محاكاة البحث - إذا كان المعرف رقمًا
       if (/^\d+$/.test(userId)) {
         resultElement.innerHTML = `
           <div style="color: var(--success); font-size: 12px;">
@@ -2789,17 +2619,20 @@
       const toUserId = document.getElementById('sendToUserId').value;
       const amount = parseFloat(document.getElementById('sendAmount').value);
       
+      // التحقق من البيانات
       if (!toUserId || !amount || amount <= 0) {
         showToast('❌ يرجى ملء جميع الحقول المطلوبة بشكل صحيح', 'error');
         return;
       }
       
+      // التحقق من الرصيد الكافي
       const balance = userBalances['USDT'] || 0;
       if (balance < amount) {
         showToast(`❌ رصيدك غير كافي. رصيدك الحالي: ${balance.toFixed(2)} USDT`, 'error');
         return;
       }
       
+      // التحقق من أن المستخدم لا يرسل إلى نفسه
       if (toUserId === currentUser.id.toString()) {
         showToast('❌ لا يمكنك إرسال الأموال إلى نفسك', 'error');
         return;
@@ -2808,18 +2641,23 @@
       try {
         showLoading(true);
         
+        // محاكاة عملية الإرسال
         await new Promise(resolve => setTimeout(resolve, 1500));
         
+        // تحديث الرصيد محلياً
         userBalances['USDT'] = balance - amount;
         
+        // تحديث واجهة المستخدم
         updateWalletsListRealTime();
         updateTotalBalance();
-        updateSendPageData();
+        updateUSDTBalanceDisplay();
         
+        // حفظ التغييرات في قاعدة البيانات
         await updateBalancesInFirestore(currentUser.id, userBalances);
         
         showToast(`✅ تم إرسال ${amount} USDT بنجاح`, 'success');
         
+        // إعادة تعيين الحقول
         document.getElementById('sendToUserId').value = '';
         document.getElementById('sendAmount').value = '';
         document.getElementById('userSearchResult').style.display = 'none';
@@ -2838,34 +2676,62 @@
     let activePair = 'BTC/USDT';
     let selectedAction = 'buy';
     let activePercentage = 25;
+    
+    // بيانات أزواج التداول - مبنية ديناميكياً من العملات المتاحة
     let tradingPairs = {};
+    
+    // بيانات الأوامر المفتوحة
     let openOrders = [];
+    
+    // بيانات المستخدم للتداول (مستمدة من أرصدة المحفظة)
     let tradingUserBalance = {};
-
+    
     // ========== تهيئة صفحة التداول ==========
     function initializeTradingPage() {
       console.log('🚀 تهيئة صفحة التداول...');
+      
+      // تهيئة بيانات التداول
       initTradingData();
+      
+      // إنشاء الرسم البياني
       createChart();
+      
+      // عرض الأوامر المفتوحة
       renderOpenOrders();
+      
+      // عرض الأرصدة
       renderBalanceList();
+      
+      // إضافة الأحداث للصفحة الجديدة
       setupTradingPageEvents();
     }
     
+    // ========== تهيئة بيانات التداول ==========
     function initTradingData() {
+      // بناء أزواج التداول من العملات المتاحة
       generateTradingPairs();
+      
+      // تحديث بيانات المستخدم من أرصدة المحفظة
       updateTradingBalancesFromWallet();
+      
+      // تحديث الأسعار الحية
       updateTradingPrices();
+      
+      // تحديث واجهة التداول
       updateTradingUI();
+      
+      // تحديث قائمة أزواج التداول في الواجهة
       updateTradingPairsList();
     }
     
     function generateTradingPairs() {
+      // إنشاء أزواج تداول مع USDT لكل عملة (باستثناء USDT نفسها)
       Object.keys(coinInfo).forEach(symbol => {
         if (symbol !== 'USDT') {
           const pair = `${symbol}/USDT`;
           const coinData = coinInfo[symbol];
           
+          // سعر افتراضي من livePrices أو قيمة افتراضية
           const defaultPrice = livePrices[symbol]?.price || 
                              (symbol === 'BTC' ? 68423.50 : 
                               symbol === 'ETH' ? 3812.75 : 
@@ -2898,18 +2764,24 @@
           };
         }
       });
+      
+      console.log('✅ تم إنشاء أزواج التداول:', Object.keys(tradingPairs));
     }
     
     function updateTradingBalancesFromWallet() {
+      // تحويل أرصدة المحفظة إلى بيانات التداول
       tradingUserBalance = {};
       
       Object.keys(coinInfo).forEach(symbol => {
         const key = symbol.toLowerCase();
         tradingUserBalance[key] = userBalances[symbol] || 0;
       });
+      
+      console.log('✅ تم تحديث أرصدة التداول:', tradingUserBalance);
     }
     
     function updateTradingPrices() {
+      // تحديث أسعار التداول من livePrices
       for (const pair in tradingPairs) {
         const baseCurrency = pair.split('/')[0];
         if (livePrices[baseCurrency]) {
@@ -2920,16 +2792,25 @@
     }
     
     function updateTradingUI() {
+      // التأكد من أن الزوج النشط موجود
       if (!tradingPairs[activePair] && Object.keys(tradingPairs).length > 0) {
         activePair = Object.keys(tradingPairs)[0];
       }
       
+      // تحديث شريط الزوج النشط
       updateMainPair(activePair);
+      
+      // تحديث أزرار النسبة المئوية
       updatePercentageButtons();
+      
+      // تحديث الزر الرئيسي
       updateMainActionButton();
+      
+      // تحديث التكلفة الإجمالية
       updateTotalCost();
     }
     
+    // ========== دوال واجهة التداول ==========
     function updateMainPair(pair) {
       const pairData = tradingPairs[pair];
       if (!pairData) return;
@@ -2942,6 +2823,7 @@
       const changeFormatted = (pairData.change >= 0 ? '+' : '') + pairData.change.toFixed(2) + '%';
       const changeClass = pairData.change >= 0 ? 'positive' : 'negative';
       
+      // تحديث عناصر الواجهة
       const mainPairElement = document.querySelector('.trading-pair-mini-name');
       if (mainPairElement) {
         mainPairElement.innerHTML = pair + ' <i>▼</i>';
@@ -2963,15 +2845,19 @@
         changeElement.className = 'trading-pair-mini-change ' + changeClass;
       }
       
+      // تحديث تسمية حقل المبلغ
       const amountLabel = document.getElementById('amount-label');
       if (amountLabel) {
         amountLabel.textContent = `المبلغ (${pairData.currency})`;
       }
       
+      // تحديث حقل المبلغ
       const amountInput = document.getElementById('amount-input');
       if (amountInput) {
         amountInput.placeholder = `أدخل المبلغ (${pairData.currency})`;
       }
+      
+      console.log(`✅ تم تحديث زوج التداول إلى: ${pair}`);
     }
     
     function updatePercentageButtons() {
@@ -3018,12 +2904,15 @@
       }
     }
     
+    // ========== إضافة دالة لتحديث قائمة أزواج التداول في الواجهة ==========
     function updateTradingPairsList() {
       const pairsList = document.querySelector('.trading-pairs-list');
       if (!pairsList) return;
       
+      // تنظيف القائمة الحالية
       pairsList.innerHTML = '';
       
+      // إضافة أزواج التداول إلى القائمة
       Object.entries(tradingPairs).forEach(([pair, data], index) => {
         const isActive = pair === activePair || (index === 0 && !activePair);
         const changeClass = data.change >= 0 ? 'positive' : 'negative';
@@ -3051,10 +2940,12 @@
         pairsList.appendChild(pairItem);
       });
       
+      // إعادة إرفاع الأحداث
       reattachTradingPairsEvents();
     }
     
     function formatVolume(pair) {
+      // حجم تداول افتراضي بناءً على العملة
       const baseCurrency = pair.split('/')[0];
       const volumes = {
         'BTC': '42.5B',
@@ -3071,6 +2962,7 @@
       return volumes[baseCurrency] || '0.1M';
     }
     
+    // ========== دوال الرسم البياني ==========
     function generateChartData(pair, period = '1h') {
       const pairData = tradingPairs[pair];
       const basePrice = pairData.price;
@@ -3083,6 +2975,7 @@
       let labels = [];
       let currentPrice = basePrice;
       
+      // توليد التواريخ بناءً على الفترة
       const now = new Date();
       for (let i = dataPoints - 1; i >= 0; i--) {
         let date = new Date(now);
@@ -3100,11 +2993,12 @@
         } else if (period === '1w') {
           date.setDate(now.getDate() - i);
           labels.push(date.getDate() + '/' + (date.getMonth() + 1));
-        } else {
+        } else { // 1m
           date.setDate(now.getDate() - i);
           labels.push(date.getDate() + '/' + (date.getMonth() + 1));
         }
         
+        // توليد سعر عشوائي مع اتجاه عام
         const randomChange = (Math.random() - 0.5) * 0.02;
         const trend = pairData.change > 0 ? 0.001 : -0.001;
         currentPrice = currentPrice * (1 + randomChange + trend);
@@ -3122,10 +3016,12 @@
       const pairData = tradingPairs[activePair];
       const chartData = generateChartData(activePair, chartPeriod);
       
+      // تدمير الرسم البياني القديم إذا كان موجوداً
       if (tradingChart) {
         tradingChart.destroy();
       }
       
+      // إنشاء الرسم البياني الخطي
       tradingChart = new Chart(ctx.getContext('2d'), {
         type: 'line',
         data: {
@@ -3201,8 +3097,11 @@
           }
         }
       });
+      
+      console.log(`📊 تم إنشاء الرسم البياني لـ ${activePair} (${chartPeriod})`);
     }
     
+    // ========== عرض الأوامر المفتوحة ==========
     function renderOpenOrders() {
       const ordersList = document.getElementById('orders-list');
       if (!ordersList) return;
@@ -3234,6 +3133,7 @@
           maximumFractionDigits: 2
         });
         
+        // حساب الوقت المنقضي
         const timeDiff = Date.now() - order.date.getTime();
         const hoursDiff = Math.floor(timeDiff / (1000 * 60 * 60));
         const minutesDiff = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
@@ -3266,17 +3166,20 @@
       });
     }
     
+    // ========== عرض قائمة الأرصدة ==========
     function renderBalanceList() {
       const balanceList = document.getElementById('balance-list');
       if (!balanceList) return;
       
       balanceList.innerHTML = '';
       
+      // عرض جميع العملات من coinInfo
       Object.entries(coinInfo).forEach(([symbol, info]) => {
         const key = symbol.toLowerCase();
         const amount = tradingUserBalance[key] || 0;
         let usdValue = 0;
         
+        // حساب القيمة بالدولار
         if (symbol === 'USDT') {
           usdValue = amount;
         } else {
@@ -3308,7 +3211,9 @@
       });
     }
 
+    // ========== إعداد أحداث صفحة التداول ==========
     function setupTradingPageEvents() {
+      // عناصر DOM الرئيسية
       const mainPair = document.getElementById('main-pair');
       const pairsSection = document.getElementById('pairs-section');
       const closePairsBtn = document.querySelector('.close-pairs-btn');
@@ -3318,54 +3223,76 @@
       const orderTypeGridItems = document.querySelectorAll('.order-type-grid-item');
       const closeOrderTypeBtn = document.querySelector('.close-order-type-btn');
       const orderTypeMini = document.getElementById('order-type-mini');
+      const orderTypeGrid = document.getElementById('order-type-grid');
       const mainActionBtn = document.getElementById('main-action-btn');
       const amountInput = document.getElementById('amount-input');
       const tabTitles = document.querySelectorAll('.tab-title');
       
       if (!mainPair) return;
       
+      // النقر على شريط زوج التداول الرئيسي
       mainPair.addEventListener('click', togglePairsSection);
       
+      // النقر على زر إغلاق قائمة الأزواج
       if (closePairsBtn) {
         closePairsBtn.addEventListener('click', hidePairsSection);
       }
       
+      // إعادة إرفاع أحداث أزواج التداول
       reattachTradingPairsEvents();
       
+      // اختيار فترة الرسم البياني
       periodButtons.forEach(btn => {
         btn.addEventListener('click', function() {
           periodButtons.forEach(b => b.classList.remove('active'));
           this.classList.add('active');
           chartPeriod = this.getAttribute('data-period');
           updateChart();
+          console.log('✅ تم اختيار فترة:', this.textContent);
         });
       });
       
+      // اختيار البيع أو الشراء
       actionButtons.forEach(btn => {
         btn.addEventListener('click', function() {
+          // إزالة النشاط من جميع الأزرار
           actionButtons.forEach(b => b.classList.remove('active'));
+          // إضافة النشاط للزر المحدد
           this.classList.add('active');
           
           selectedAction = this.getAttribute('data-action');
           updateMainActionButton();
           
+          // تحديث المبلغ بناءً على النسبة الحالية بعد تغيير العملية
           updateAmountFromPercentage(activePercentage);
+          
+          console.log('✅ تم اختيار العملية:', selectedAction);
         });
       });
       
+      // اختيار النسبة المئوية
       percentageButtons.forEach(btn => {
         btn.addEventListener('click', function() {
+          // تحديث النسبة النشطة
           activePercentage = parseInt(this.getAttribute('data-percentage'));
+          
+          // تحديث حالة الأزرار
           updatePercentageButtons();
+          
+          // تحديث المبلغ بناءً على النسبة المحددة
           updateAmountFromPercentage(activePercentage);
+          
+          console.log('✅ تم اختيار النسبة:', activePercentage + '%');
         });
       });
       
+      // النقر على شريط نوع الأمر المصغر
       if (orderTypeMini) {
         orderTypeMini.addEventListener('click', function(e) {
           if (e.target.closest('.trading-pair-mini')) {
             showOrderTypeGrid();
             
+            // إخفاء قائمة الأزواج إذا كانت ظاهرة
             if (pairsSection.classList.contains('show')) {
               hidePairsSection();
             }
@@ -3373,50 +3300,68 @@
         });
       }
       
+      // النقر على نوع أمر في الشبكة
       orderTypeGridItems.forEach(item => {
         item.addEventListener('click', function() {
           const orderType = this.getAttribute('data-type');
           
+          // تحديث النوع النشط
           updateActiveOrderTypeInGrid(orderType);
+          
+          // تحديث الشريط المصغر
           updateOrderTypeMini(orderType);
+          
+          // تحديث النموذج
           setOrderType(orderType);
+          
+          // إخفاء الشبكة
           hideOrderTypeGrid();
+          
+          console.log('✅ تم اختيار نوع الأمر:', orderType);
         });
       });
       
+      // زر إغلاق شبكة أنواع الأوامر
       if (closeOrderTypeBtn) {
         closeOrderTypeBtn.addEventListener('click', hideOrderTypeGrid);
       }
       
+      // تحديث التكلفة عند تغيير المبلغ
       if (amountInput) {
         amountInput.addEventListener('input', updateTotalCost);
       }
       
+      // الزر الرئيسي للشراء/البيع
       if (mainActionBtn) {
         mainActionBtn.addEventListener('click', function() {
           executeTrade();
         });
       }
       
+      // تبديل التبويبات بين الأوامر والأرصدة
       tabTitles.forEach(tab => {
         tab.addEventListener('click', function() {
           const tabName = this.getAttribute('data-tab');
           
+          // إزالة النشاط من جميع التبويبات والمحتويات
           document.querySelectorAll('.tab-title').forEach(t => t.classList.remove('active'));
           document.querySelectorAll('.trading-tab-content').forEach(c => c.classList.remove('active'));
           
+          // تفعيل التبويب النشط
           this.classList.add('active');
           const tabElement = document.getElementById(tabName + '-tab');
           if (tabElement) {
             tabElement.classList.add('active');
           }
           
+          // إذا كان التبويب النشط هو "balance"، نقوم بعرض الأرصدة
           if (tabName === 'balance') {
             renderBalanceList();
           }
         });
       });
       
+      // تحديث تلقائي للأسعار كل 10 ثواني
       setInterval(() => {
         updateTradingPrices();
         updateMainPair(activePair);
@@ -3425,6 +3370,7 @@
       }, 10000);
     }
     
+    // ========== دوال إضافية لصفحة التداول ==========
     function togglePairsSection() {
       const pairsSection = document.getElementById('pairs-section');
       const arrowIcon = document.querySelector('.trading-pair-mini-name i');
@@ -3433,6 +3379,7 @@
         pairsSection.classList.toggle('show');
         arrowIcon.classList.toggle('active');
         
+        // إخفاء شبكة أنواع الأوامر إذا كانت ظاهرة
         const orderTypeGrid = document.getElementById('order-type-grid');
         if (orderTypeGrid && orderTypeGrid.classList.contains('show')) {
           hideOrderTypeGrid();
@@ -3451,17 +3398,27 @@
     function reattachTradingPairsEvents() {
       const pairItems = document.querySelectorAll('.trading-pair-item');
       
+      // النقر على زوج في القائمة
       pairItems.forEach(item => {
         item.addEventListener('click', function() {
           const selectedPair = this.getAttribute('data-pair');
+          const selectedFullName = this.getAttribute('data-fullname');
+          
+          // تحديث الزوج النشط
           activePair = selectedPair;
           
+          // تحديث الواجهة
           updateMainPair(selectedPair);
           updateActivePairInList(selectedPair);
           updateChart();
           
+          // إخفاء قائمة الأزواج
           hidePairsSection();
+          
+          // تحديث التكلفة الإجمالية
           updateTotalCost();
+          
+          console.log(`✅ تم اختيار زوج التداول: ${selectedPair}`);
         });
       });
     }
@@ -3530,10 +3487,12 @@
     }
     
     function setOrderType(orderType) {
+      // إخفاء جميع الحقول الإضافية أولاً
       document.querySelectorAll('.additional-field').forEach(field => {
         field.style.display = 'none';
       });
       
+      // إظهار الحقول المناسبة بناءً على نوع الأمر
       if (orderType === 'limit') {
         const limitPriceField = document.getElementById('limit-price-field');
         const limitPriceInput = document.getElementById('limit-price-input');
@@ -3548,7 +3507,7 @@
         if (stopPriceField) stopPriceField.style.display = 'block';
         if (stopPriceInput) {
           const currentPrice = tradingPairs[activePair].price;
-          const stopPrice = currentPrice * 0.98;
+          const stopPrice = currentPrice * 0.98; // 2% أقل للسعر الحالي كمثال
           stopPriceInput.value = stopPrice.toFixed(2);
         }
       }
@@ -3561,12 +3520,15 @@
       const pairData = tradingPairs[activePair];
       const price = pairData.price;
       
+      // حساب المبلغ بناءً على النسبة المئوية من الرصيد المتاح
       let calculatedAmount;
       
       if (selectedAction === 'buy') {
+        // للشراء: نسبة من رصيد USDT
         const maxAmount = tradingUserBalance.usdt / price;
         calculatedAmount = maxAmount * (percentage / 100);
       } else {
+        // للبيع: نسبة من رصيد العملة
         const currency = pairData.currency.toLowerCase();
         const maxAmount = tradingUserBalance[currency] || 0;
         calculatedAmount = maxAmount * (percentage / 100);
@@ -3593,6 +3555,7 @@
       const amount = parseFloat(amountInput.value) || 0;
       
       if (selectedAction === 'buy') {
+        // عملية الشراء
         const cost = amount * pairData.price;
         
         if (cost > tradingUserBalance.usdt) {
@@ -3605,14 +3568,18 @@
           return;
         }
         
+        // تحديث الرصيد محلياً
         tradingUserBalance.usdt -= cost;
         tradingUserBalance[currency] = (tradingUserBalance[currency] || 0) + amount;
         
+        // تحديث أرصدة المستخدم الأصلية
         userBalances['USDT'] = tradingUserBalance.usdt;
         userBalances[pairData.currency] = tradingUserBalance[currency];
         
+        // حفظ التغييرات في قاعدة البيانات
         await updateBalancesInFirestore(currentUser.id, userBalances);
         
+        // إضافة أمر جديد
         const newOrder = {
           id: openOrders.length > 0 ? Math.max(...openOrders.map(o => o.id)) + 1 : 1,
           pair: activePair,
@@ -3629,6 +3596,7 @@
         alert(`✅ تم شراء ${amount} ${pairData.currency} (${activePair}) بنجاح!\nالتكلفة: $${cost.toFixed(2)}`);
         
       } else {
+        // عملية البيع
         const revenue = amount * pairData.price;
         
         if (amount > (tradingUserBalance[currency] || 0)) {
@@ -3641,14 +3609,18 @@
           return;
         }
         
+        // تحديث الرصيد محلياً
         tradingUserBalance.usdt += revenue;
         tradingUserBalance[currency] = (tradingUserBalance[currency] || 0) - amount;
         
+        // تحديث أرصدة المستخدم الأصلية
         userBalances['USDT'] = tradingUserBalance.usdt;
         userBalances[pairData.currency] = tradingUserBalance[currency];
         
+        // حفظ التغييرات في قاعدة البيانات
         await updateBalancesInFirestore(currentUser.id, userBalances);
         
+        // إضافة أمر جديد
         const newOrder = {
           id: openOrders.length > 0 ? Math.max(...openOrders.map(o => o.id)) + 1 : 1,
           pair: activePair,
@@ -3665,46 +3637,37 @@
         alert(`✅ تم بيع ${amount} ${pairData.currency} (${activePair}) بنجاح!\nالإيراد: $${revenue.toFixed(2)}`);
       }
       
+      // تحديث الواجهة في الصفحة الرئيسية أيضاً
       updateWalletsListRealTime();
       updateTotalBalance();
       
+      // تحديث واجهة التداول
       updateTotalCost();
       renderBalanceList();
       renderOpenOrders();
       
+      // تحديث المبلغ بناءً على النسبة الحالية بعد إجراء العملية
       updateAmountFromPercentage(activePercentage);
+      
+      console.log(`✅ أمر ${selectedAction}:`, amount, activePair);
     }
-
-    // ========== دوال الشريط السفلي ==========
-    document.querySelectorAll('.bottom-nav-item[data-page]').forEach(item => {
-      item.addEventListener('click', function(e) {
-        document.querySelectorAll('.bottom-nav-item').forEach(el => {
-          el.classList.remove('active');
-        });
-        
-        this.classList.add('active');
-        
-        const pageName = this.getAttribute('data-page');
-        
-        if (pageName === 'main') {
-          showMainPage();
-        }
-      });
-    });
 
     // ========== التهيئة النهائية ==========
     document.addEventListener('DOMContentLoaded', function() {
       console.log('🚀 Initializing Crynova Wallet System...');
       
+      // أحداث الأزرار الرئيسية
       document.getElementById('walletReceiveBtn').addEventListener('click', showReceivePage);
       document.getElementById('receiveBackBtn').addEventListener('click', showMainPage);
       
       document.getElementById('walletSendBtn').addEventListener('click', showSendPage);
       document.getElementById('sendBackBtn').addEventListener('click', showMainPage);
       
+      // زر التداول
       document.getElementById('walletTradeBtn').addEventListener('click', showTradingPage);
       document.getElementById('tradingBackBtn').addEventListener('click', showMainPage);
       
+      // إضافة أحداث لأزرار الفرز
       document.querySelectorAll('.wallet-sort-btn').forEach(btn => {
         btn.addEventListener('click', function() {
           const sortType = this.getAttribute('data-sort');
@@ -3713,8 +3676,10 @@
         });
       });
       
+      // تهيئة Telegram WebApp
       initializeTelegramWebApp();
       
+      // تشغيل اختبار النظام بعد 3 ثواني
       setTimeout(() => {
         testSystem();
       }, 3000);
@@ -3734,6 +3699,7 @@
           if (user && user.id) {
             console.log('👤 بيانات مستخدم Telegram:', user);
             
+            // تحديث المستخدم الحالي
             currentUser = {
               id: user.id,
               firstName: user.first_name || 'مستخدم',
@@ -3741,11 +3707,14 @@
               username: user.username || null
             };
             
+            // تحديث واجهة المستخدم
             updateUserInterface(currentUser);
             
+            // تهيئة المحفظة
             await initializeUserWallet(user.id);
             await loadUserWallets(user.id);
             
+            // بدء تحديث الأسعار كل ثانية
             startPriceUpdates();
             
           } else {
@@ -3763,6 +3732,7 @@
       }
     }
 
+    // دالة استخدام بيانات تجريبية
     function useMockData() {
       const mockUser = {
         id: 5922049376,
@@ -3774,6 +3744,7 @@
       currentUser = mockUser;
       updateUserInterface(mockUser);
       
+      // إضافة أرصدة تجريبية للاختبار
       userBalances = {
         'BTC': 0.005,
         'ETH': 0.1,
@@ -3787,6 +3758,7 @@
         'DOGE': 5000
       };
       
+      // تهيئة البيانات التجريبية
       initializeUserSystem(mockUser);
     }
 
@@ -3795,6 +3767,7 @@
         await initializeUserWallet(userData.id);
         await loadUserWallets(userData.id);
         
+        // بدء تحديث الأسعار كل ثانية
         startPriceUpdates();
         
       } catch (error) {
@@ -3802,7 +3775,8 @@
       }
     }
 
-    function testSystem() {
+    // دالة اختبار النظام
+    async function testSystem() {
       console.log('🧪 بدء اختبار النظام...');
       console.log('👤 المستخدم الحالي:', currentUser);
       console.log('📊 الأرصدة الحالية:', userBalances);
