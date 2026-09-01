@@ -12,9 +12,6 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
   
-  <!-- إضافة مكتبة Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  
   <style>
     * {
       margin: 0;
@@ -38,8 +35,6 @@
       --text-light: #888;
       --border-light: rgba(0, 0, 0, 0.1);
       --shadow-light: rgba(0, 0, 0, 0.08);
-      --chart-up: #26a17b;
-      --chart-down: #ff4757;
     }
 
     body {
@@ -580,7 +575,7 @@
       }
     }
 
-    /* ========== صفحات كاملة (الاستلام والإرسال والتداول) ========== */
+    /* ========== صفحات كاملة (الاستلام والإرسال) ========== */
     .full-page {
       padding: 0;
       background: #ffffff;
@@ -601,11 +596,6 @@
       position: relative;
       width: 100%;
       box-shadow: 0 4px 12px rgba(0, 114, 255, 0.3);
-    }
-
-    /* الشريط العلوي الخاص بصفحة التداول */
-    .page-header.trading-header {
-      background: linear-gradient(135deg, #7d3dff, #0072ff);
     }
 
     .page-header h1 {
@@ -650,11 +640,27 @@
       padding: 15px;
     }
 
-    .page-subtitle {
-      color: var(--text-light);
-      font-size: 14px;
+    .page-card {
+      background: linear-gradient(135deg, #f8f9fa, #ffffff);
+      border-radius: 20px;
+      padding: 30px;
+      margin: 30px 0;
+      border: 1px solid var(--border-light);
+      box-shadow: 0 10px 30px rgba(0, 114, 255, 0.1);
       text-align: center;
-      margin-bottom: 30px;
+    }
+
+    .page-card-icon {
+      font-size: 60px;
+      margin-bottom: 20px;
+      color: var(--primary);
+    }
+
+    .page-card-text {
+      font-size: 16px;
+      color: var(--text-gray);
+      line-height: 1.6;
+      margin-bottom: 20px;
     }
 
     .page-actions {
@@ -756,37 +762,27 @@
       line-height: 1.6;
     }
 
-    /* تأثيرات إضافية */
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(0, 114, 255, 0.4); }
-      70% { box-shadow: 0 0 0 20px rgba(0, 114, 255, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(0, 114, 255, 0); }
-    }
-
-    .page-card {
-      background: linear-gradient(135deg, #f8f9fa, #ffffff);
-      border-radius: 20px;
-      padding: 30px;
-      margin: 30px 0;
-      border: 1px solid var(--border-light);
-      box-shadow: 0 10px 30px rgba(0, 114, 255, 0.1);
+    .usdt-balance-card-small {
+      background: linear-gradient(135deg, #26a17b, #2dcc9e);
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: white;
+      margin-bottom: 20px;
       text-align: center;
+      box-shadow: 0 4px 12px rgba(38, 161, 123, 0.3);
+      font-size: 14px;
+      font-weight: 600;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
     }
 
-    .page-card-icon {
-      font-size: 60px;
-      margin-bottom: 20px;
-      color: var(--primary);
-    }
-
-    .page-card-text {
+    .usdt-balance-amount {
       font-size: 16px;
-      color: var(--text-gray);
-      line-height: 1.6;
-      margin-bottom: 20px;
+      font-weight: 700;
+      margin-top: 4px;
     }
 
-    /* نماذج خاصة بصفحة الإرسال */
     .send-form-group {
       margin-bottom: 20px;
     }
@@ -813,829 +809,35 @@
       box-shadow: 0 0 0 3px rgba(0,114,255,0.1);
     }
 
-    /* بطاقة عرض رصيد USDT الصغيرة */
-    .usdt-balance-card-small {
-      background: linear-gradient(135deg, #26a17b, #2dcc9e);
-      border-radius: 12px;
-      padding: 12px 16px;
-      color: white;
-      margin-bottom: 20px;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(38, 161, 123, 0.3);
-      font-size: 14px;
-      font-weight: 600;
-      width: fit-content;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .usdt-balance-amount {
-      font-size: 16px;
-      font-weight: 700;
-      margin-top: 4px;
-    }
-
-    /* ========== صفحة التداول ========== */
-    .trading-page {
-      background: #ffffff;
-      min-height: 100vh;
-    }
-
-    /* تم إزالة الهيدر القديم لصفحة التداول */
-
-    /* شريط زوج التداول المصغر */
-    .trading-pair-mini {
-      background: linear-gradient(135deg, rgba(0, 114, 255, 0.05), rgba(255, 45, 158, 0.05));
-      border-radius: 12px;
-      padding: 10px 15px;
-      margin: 15px;
-      border: 1px solid rgba(0, 114, 255, 0.1);
+    /* ========== صفحة التداول (فارغة) ========== */
+    .trading-empty-page {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
-    }
-
-    .trading-pair-mini:hover {
-      border-color: var(--primary);
-      box-shadow: 0 4px 12px rgba(0, 114, 255, 0.1);
-    }
-
-    .trading-pair-mini-left {
-      text-align: right;
-      flex: 1;
-    }
-
-    .trading-pair-mini-name {
-      font-weight: 700;
-      font-size: 13px;
-      color: var(--text-dark);
-      margin-bottom: 2px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .trading-pair-mini-name i {
-      font-size: 10px;
-      transition: transform 0.3s ease;
-    }
-
-    .trading-pair-mini-name.active i {
-      transform: rotate(180deg);
-    }
-
-    .trading-pair-mini-fullname {
-      font-size: 10px;
-      color: var(--text-light);
-    }
-
-    .trading-pair-mini-right {
-      text-align: left;
-    }
-
-    .trading-pair-mini-price {
-      font-weight: 700;
-      font-size: 14px;
-      color: var(--text-dark);
-      margin-bottom: 2px;
-    }
-
-    .trading-pair-mini-change {
-      font-size: 10px;
-      font-weight: 600;
-      padding: 2px 6px;
-      border-radius: 4px;
-      display: inline-block;
-    }
-
-    .trading-pair-mini-change.positive {
-      background: rgba(38, 161, 123, 0.1);
-      color: var(--success);
-      border: 1px solid rgba(38, 161, 123, 0.2);
-    }
-
-    .trading-pair-mini-change.negative {
-      background: rgba(255, 71, 87, 0.1);
-      color: var(--danger);
-      border: 1px solid rgba(255, 71, 87, 0.2);
-    }
-
-    /* قائمة أزواج التداول (مخفية بشكل افتراضي) */
-    .trading-pairs-section {
-      margin: 0 15px 15px;
-      display: none;
-      animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .trading-pairs-section.show {
-      display: block;
-    }
-
-    .trading-section-title {
-      font-size: 13px;
-      color: var(--text-gray);
-      margin-bottom: 10px;
-      font-weight: 600;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .close-pairs-btn {
-      font-size: 10px;
-      color: var(--text-light);
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 4px;
-      transition: all 0.3s ease;
-    }
-
-    .close-pairs-btn:hover {
-      color: var(--primary);
-      background: rgba(0, 114, 255, 0.05);
-    }
-
-    .trading-pairs-list {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-    }
-
-    .trading-pair-item {
-      background: #f8f9fa;
-      border-radius: 10px;
-      padding: 12px;
-      cursor: pointer;
-      border: 2px solid transparent;
-      transition: all 0.3s ease;
-    }
-
-    .trading-pair-item:hover {
-      background: #ffffff;
-      border-color: var(--primary);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px var(--shadow-light);
-    }
-
-    .trading-pair-item.active {
-      background: linear-gradient(135deg, rgba(0, 114, 255, 0.1), rgba(255, 45, 158, 0.1));
-      border-color: var(--primary);
-    }
-
-    .trading-pair-item-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-
-    .trading-pair-item-symbol {
-      font-weight: 700;
-      font-size: 13px;
-      color: var(--text-dark);
-    }
-
-    .trading-pair-item-change {
-      font-size: 10px;
-      font-weight: 600;
-      padding: 2px 6px;
-      border-radius: 4px;
-    }
-
-    .trading-pair-item-change.positive {
-      background: rgba(38, 161, 123, 0.1);
-      color: var(--success);
-    }
-
-    .trading-pair-item-change.negative {
-      background: rgba(255, 71, 87, 0.1);
-      color: var(--danger);
-    }
-
-    .trading-pair-item-details {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .trading-pair-item-price {
-      font-weight: 600;
-      font-size: 12px;
-      color: var(--text-dark);
-    }
-
-    .trading-pair-item-volume {
-      font-size: 9px;
-      color: var(--text-light);
-    }
-
-    /* شبكة أنواع الأوامر - بنفس تصميم أزواج التداول */
-    .trading-order-type-selection {
-      margin: 0 15px 15px;
-      display: none;
-      animation: fadeIn 0.3s ease;
-    }
-
-    .trading-order-type-selection.show {
-      display: block;
-    }
-
-    .order-types-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
-
-    .order-type-grid-item {
-      background: #f8f9fa;
-      border-radius: 10px;
-      padding: 12px;
-      cursor: pointer;
-      border: 2px solid transparent;
-      transition: all 0.3s ease;
-      text-align: center;
-    }
-
-    .order-type-grid-item:hover {
-      background: #ffffff;
-      border-color: var(--primary);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px var(--shadow-light);
-    }
-
-    .order-type-grid-item.active {
-      background: linear-gradient(135deg, rgba(0, 114, 255, 0.1), rgba(255, 45, 158, 0.1));
-      border-color: var(--primary);
-    }
-
-    /* إزالة الأيقونات من شبكة أنواع الأوامر */
-    .order-type-grid-icon {
-      display: none; /* إخفاء الأيقونات */
-    }
-
-    .order-type-grid-name {
-      font-weight: 700;
-      font-size: 12px;
-      color: var(--text-dark);
-      margin-bottom: 3px;
-    }
-
-    .order-type-grid-desc {
-      font-size: 9px;
-      color: var(--text-light);
-      line-height: 1.3;
-    }
-
-    /* شريط نوع الأمر المصغر */
-    .trading-order-type-mini {
-      margin: 0 15px 15px;
-      display: block;
-    }
-
-    .trading-order-type-mini .trading-pair-mini {
-      background: linear-gradient(135deg, rgba(125, 61, 255, 0.05), rgba(255, 45, 158, 0.05));
-      border: 1px solid rgba(125, 61, 255, 0.1);
-    }
-
-    /* نافذة التداول - إخفاء أزرار نوع الأمر */
-    .trading-order-section {
-      margin: 0 15px 20px;
-    }
-
-    /* إخفاء أزرار نوع الأمر في نافذة التداول */
-    .trading-order-type {
-      display: none; /* إخفاء هذه الأزرار */
-    }
-
-    .trading-order-type-btn {
-      flex: 1;
-      padding: 8px;
-      border-radius: 8px;
-      border: 1px solid var(--border-light);
-      background: #ffffff;
-      color: var(--text-gray);
-      font-weight: 600;
-      font-size: 11px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .trading-order-type-btn:hover {
-      background: #f8f9fa;
-      color: var(--text-dark);
-    }
-
-    .trading-order-type-btn.active {
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
-      color: #ffffff;
-      border-color: transparent;
-      box-shadow: 0 2px 8px rgba(110,0,255,0.2);
-    }
-
-    .trading-order-form {
-      background: #f8f9fa;
-      border-radius: 12px;
-      padding: 15px;
-      border: 1px solid var(--border-light);
-    }
-
-    /* قسم اختيار البيع أو الشراء - داخل النموذج */
-    .trading-action-select-inner {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 15px;
-      background: rgba(255, 255, 255, 0.7);
-      border-radius: 10px;
-      padding: 8px;
-      border: 1px solid var(--border-light);
-    }
-
-    .trading-action-btn-inner {
-      flex: 1;
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: none;
-      font-weight: 600;
-      cursor: pointer;
-      font-size: 11px;
-      transition: all 0.3s ease;
-    }
-
-    .trading-buy-select-btn-inner {
-      background: rgba(38, 161, 123, 0.1);
-      color: var(--success);
-      border: 1px solid rgba(38, 161, 123, 0.2);
-    }
-
-    .trading-buy-select-btn-inner:hover {
-      background: rgba(38, 161, 123, 0.2);
-    }
-
-    .trading-buy-select-btn-inner.active {
-      background: linear-gradient(90deg, var(--success), #1bc48b);
-      color: #ffffff;
-      border-color: transparent;
-      box-shadow: 0 2px 8px rgba(38, 161, 123, 0.2);
-    }
-
-    .trading-sell-select-btn-inner {
-      background: rgba(255, 71, 87, 0.1);
-      color: var(--danger);
-      border: 1px solid rgba(255, 71, 87, 0.2);
-    }
-
-    .trading-sell-select-btn-inner:hover {
-      background: rgba(255, 71, 87, 0.2);
-    }
-
-    .trading-sell-select-btn-inner.active {
-      background: linear-gradient(90deg, var(--danger), #ff6b81);
-      color: #ffffff;
-      border-color: transparent;
-      box-shadow: 0 2px 8px rgba(255, 71, 87, 0.2);
-    }
-
-    .trading-form-group {
-      margin-bottom: 12px;
-    }
-
-    .trading-form-label {
-      display: block;
-      font-size: 12px;
-      color: var(--text-gray);
-      margin-bottom: 5px;
-      font-weight: 600;
-    }
-
-    .trading-form-input {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 8px;
-      border: 1px solid var(--border-light);
-      background: #ffffff;
-      color: var(--text-dark);
-      font-size: 12px;
-      transition: all 0.3s ease;
-    }
-
-    .trading-form-input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(0,114,255,0.1);
-    }
-
-    /* أزرار النسبة المئوية - معدلة لتصبح جميعها في صف واحد */
-    .percentage-buttons {
-      display: flex;
-      flex-direction: row;
-      gap: 6px;
-      margin-top: 8px;
-      overflow-x: auto;
-      padding-bottom: 5px;
-    }
-
-    .percentage-btn {
-      flex: 1;
-      min-width: 60px;
-      padding: 6px 0;
-      border-radius: 6px;
-      border: 1px solid var(--border-light);
-      background: #ffffff;
-      color: var(--text-gray);
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-align: center;
-      white-space: nowrap;
-    }
-
-    .percentage-btn:hover {
-      background: #f8f9fa;
-      color: var(--text-dark);
-    }
-
-    .percentage-btn.active {
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
-      color: #ffffff;
-      border-color: transparent;
-      box-shadow: 0 2px 8px rgba(110,0,255,0.2);
-    }
-
-    /* الزر الرئيسي للشراء/البيع - مصغر */
-    .trading-main-action-btn {
-      width: 100%;
-      padding: 12px;
-      border-radius: 10px;
-      border: none;
-      font-weight: 600;
-      cursor: pointer;
-      font-size: 14px;
-      transition: all 0.3s ease;
-      margin-top: 15px;
-      display: flex;
       justify-content: center;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .trading-main-action-btn.buy {
-      background: linear-gradient(90deg, var(--success), #1bc48b);
-      color: #ffffff;
-      box-shadow: 0 3px 10px rgba(38, 161, 123, 0.2);
-    }
-
-    .trading-main-action-btn.buy:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(38, 161, 123, 0.3);
-    }
-
-    .trading-main-action-btn.sell {
-      background: linear-gradient(90deg, var(--danger), #ff6b81);
-      color: #ffffff;
-      box-shadow: 0 3px 10px rgba(255, 71, 87, 0.2);
-    }
-
-    .trading-main-action-btn.sell:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
-    }
-
-    /* الرسم البياني */
-    .trading-chart-section {
-      margin: 0 15px 20px;
-    }
-
-    .trading-chart-container {
-      background: #f8f9fa;
-      border-radius: 12px;
-      padding: 10px;
-      height: 220px;
-      position: relative;
-      border: 1px solid var(--border-light);
-    }
-
-    .chart-wrapper {
-      width: 100%;
-      height: 100%;
-      position: relative;
-    }
-
-    #tradingChart {
-      width: 100% !important;
-      height: 100% !important;
-    }
-
-    /* فترة الرسم البياني */
-    .trading-chart-periods {
-      display: flex;
-      gap: 6px;
-      margin-top: 8px;
-      overflow-x: auto;
-      padding-bottom: 3px;
-    }
-
-    .trading-period-btn {
-      padding: 4px 8px;
-      border-radius: 6px;
-      border: 1px solid var(--border-light);
-      background: #ffffff;
-      color: var(--text-gray);
-      font-size: 10px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      white-space: nowrap;
-    }
-
-    .trading-period-btn:hover {
-      background: #f8f9fa;
-      color: var(--text-dark);
-    }
-
-    .trading-period-btn.active {
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
-      color: #ffffff;
-      font-weight: bold;
-      border-color: transparent;
-      box-shadow: 0 2px 8px rgba(110,0,255,0.2);
-    }
-
-    /* تنسيقات التبويب */
-    .tabbed-title {
-      display: flex;
-      border-bottom: 1px solid var(--border-light);
-      padding-bottom: 8px;
-      margin: 0 15px 15px;
-    }
-
-    .tab-title {
-      flex: 1;
+      min-height: 60vh;
+      padding: 30px 20px;
       text-align: center;
-      padding: 8px 0;
-      font-size: 13px;
-      color: var(--text-light);
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border-radius: 6px;
-      margin: 0 2px;
     }
 
-    .tab-title:hover {
-      color: var(--primary);
-      background: rgba(0, 114, 255, 0.05);
-    }
-
-    .tab-title.active {
-      color: var(--primary);
-      font-weight: 700;
-      background: rgba(0, 114, 255, 0.1);
-    }
-
-    /* محتوى التبويب */
-    .trading-tab-content {
-      display: none;
-      animation: fadeIn 0.3s ease;
-      padding: 0 15px;
-    }
-
-    .trading-tab-content.active {
-      display: block;
-    }
-
-    /* قائمة الأرصدة */
-    .balance-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .balance-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px;
-      border-radius: 10px;
-      background: #f8f9fa;
-      border: 1px solid transparent;
-      transition: all 0.3s ease;
-      font-size: 12px;
-    }
-
-    .balance-item:hover {
-      background: #ffffff;
-      border-color: var(--border-light);
-    }
-
-    .balance-currency {
-      font-weight: 700;
-      color: var(--text-dark);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .balance-amount {
-      font-weight: 700;
-      color: var(--text-dark);
-    }
-
-    .balance-usd-value {
-      font-size: 10px;
-      color: var(--text-light);
-      text-align: left;
-    }
-
-    /* حالة عندما لا تكون هناك أرصدة */
-    .no-balance-message {
-      text-align: center;
-      padding: 20px;
-      color: var(--text-light);
-      font-size: 12px;
-      background: #f8f9fa;
-      border-radius: 10px;
-      border: 1px dashed var(--border-light);
-    }
-
-    /* أوامر مفتوحة مصغرة */
-    .trading-orders-mini-section {
+    .trading-empty-icon {
+      font-size: 80px;
       margin-bottom: 20px;
+      opacity: 0.5;
     }
 
-    .trading-orders-mini-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .trading-order-mini-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px;
-      border-radius: 10px;
-      background: #f8f9fa;
-      border: 1px solid transparent;
-      transition: all 0.3s ease;
-      font-size: 12px;
-      position: relative;
-    }
-
-    .trading-order-mini-item:hover {
-      background: #ffffff;
-      border-color: var(--border-light);
-    }
-
-    .trading-order-mini-info {
-      text-align: right;
-      flex: 1;
-    }
-
-    .trading-order-mini-pair {
+    .trading-empty-title {
+      font-size: 24px;
       font-weight: 700;
       color: var(--text-dark);
-      margin-bottom: 2px;
+      margin-bottom: 10px;
     }
 
-    .trading-order-mini-type {
-      display: inline-block;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 10px;
-      font-weight: 600;
-    }
-
-    .trading-order-mini-type.buy {
-      background: rgba(38, 161, 123, 0.1);
-      color: var(--success);
-      border: 1px solid rgba(38, 161, 123, 0.2);
-    }
-
-    .trading-order-mini-type.sell {
-      background: rgba(255, 71, 87, 0.1);
-      color: var(--danger);
-      border: 1px solid rgba(255, 71, 87, 0.2);
-    }
-
-    .trading-order-mini-details {
-      text-align: left;
-      flex: 1;
-      padding: 0 10px;
-    }
-
-    .trading-order-mini-amount {
-      font-weight: 700;
-      color: var(--text-dark);
-      margin-bottom: 2px;
-    }
-
-    .trading-order-mini-price {
-      color: var(--text-light);
-      font-size: 10px;
-    }
-
-    /* زر الإلغاء */
-    .trading-order-mini-cancel {
-      background: rgba(255, 71, 87, 0.1);
-      border: 1px solid rgba(255, 71, 87, 0.2);
-      color: var(--danger);
-      border-radius: 6px;
-      padding: 4px 8px;
-      font-size: 10px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      white-space: nowrap;
-      display: flex;
-      align-items: center;
-      gap: 3px;
-    }
-
-    .trading-order-mini-cancel:hover {
-      background: rgba(255, 71, 87, 0.2);
-      transform: scale(1.05);
-    }
-
-    .trading-order-mini-cancel:active {
-      transform: scale(0.95);
-    }
-
-    /* حالة عندما لا تكون هناك أوامر */
-    .no-orders-message {
-      text-align: center;
-      padding: 20px;
-      color: var(--text-light);
-      font-size: 12px;
-      background: #f8f9fa;
-      border-radius: 10px;
-      border: 1px dashed var(--border-light);
-    }
-
-    /* تذييل الصفحة */
-    .trading-footer {
-      text-align: center;
-      padding: 15px 0 5px;
-      color: var(--text-light);
-      font-size: 10px;
-      opacity: 0.7;
-    }
-
-    /* تأثيرات إضافية */
-    .trading-loading {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border: 2px solid rgba(0, 114, 255, 0.3);
-      border-radius: 50%;
-      border-top-color: var(--primary);
-      animation: spin 1s ease-in-out infinite;
-      margin-right: 5px;
-    }
-
-    /* تجاوبية */
-    @media (max-width: 480px) {
-      .trading-pairs-list {
-        grid-template-columns: 1fr;
-      }
-      
-      .order-types-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .trading-chart-container {
-        height: 200px;
-      }
-      
-      .trading-order-mini-item {
-        flex-wrap: wrap;
-      }
-      
-      .trading-order-mini-cancel {
-        margin-top: 5px;
-        width: 100%;
-        justify-content: center;
-      }
-      
-      /* الحفاظ على تخطيط flex للأزرار في الشاشات الصغيرة */
-      .percentage-buttons {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-      }
-      
-      .percentage-btn {
-        min-width: 55px;
-        font-size: 10px;
-        padding: 6px 2px;
-      }
+    .trading-empty-desc {
+      font-size: 16px;
+      color: var(--text-gray);
+      max-width: 300px;
+      line-height: 1.6;
     }
   </style>
 </head>
@@ -1831,187 +1033,20 @@
     </div>
   </div>
 
-  <!-- ========== صفحة التداول الكاملة ========== -->
+  <!-- ========== صفحة التداول (فارغة) ========== -->
   <div class="full-page" id="tradingPage">
-    <div class="trading-page">
-      <div class="wallet-frame">
-        <!-- ========== الشريط العلوي الجديد لصفحة التداول ========== -->
-        <div class="page-header trading-header">
-          <button class="page-close-btn" id="tradingBackBtn">&times;</button>
-          <h1>منصة التداول</h1>
-          <p>تداول العملات الرقمية بسهولة وأمان</p>
-        </div>
-
-        <!-- شريط زوج التداول المصغر - يمكن النقر عليه -->
-        <div class="trading-pair-mini" id="main-pair">
-          <div class="trading-pair-mini-left">
-            <div class="trading-pair-mini-name">
-              BTC/USDT
-              <i>▼</i>
-            </div>
-            <div class="trading-pair-mini-fullname">Bitcoin / Tether</div>
-          </div>
-          <div class="trading-pair-mini-right">
-            <div class="trading-pair-mini-price">$68,423.50</div>
-            <div class="trading-pair-mini-change positive">+2.34%</div>
-          </div>
-        </div>
-
-        <!-- قائمة أزواج التداول (مخفية بشكل افتراضي) -->
-        <div class="trading-pairs-section" id="pairs-section">
-          <div class="trading-section-title">
-            أزواج التداول المتاحة
-            <button class="close-pairs-btn">إغلاق</button>
-          </div>
-          <div class="trading-pairs-list">
-            <!-- سيتم ملؤها ديناميكياً من JavaScript -->
-          </div>
-        </div>
-
-        <!-- شريط نوع الأمر المصغر - يمكن النقر عليه -->
-        <div class="trading-order-type-mini" id="order-type-mini">
-          <div class="trading-pair-mini">
-            <div class="trading-pair-mini-left">
-              <div class="trading-pair-mini-name">
-                نوع الأمر: محدد
-                <i>▼</i>
-              </div>
-              <div class="trading-pair-mini-fullname">تنفيذ عند سعر محدد</div>
-            </div>
-            <div class="trading-pair-mini-right">
-              <div class="trading-pair-mini-price"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- شبكة أنواع الأوامر - بنفس تصميم أزواج التداول -->
-        <div class="trading-order-type-selection" id="order-type-grid">
-          <div class="trading-section-title">
-            اختر نوع الأمر
-            <button class="close-pairs-btn close-order-type-btn">إغلاق</button>
-          </div>
-          <div class="order-types-grid">
-            <!-- نوع الأمر: سوقي -->
-            <div class="order-type-grid-item" data-type="market">
-              <div class="order-type-grid-name">سوقي</div>
-              <div class="order-type-grid-desc">تنفيذ فوري بالسعر الحالي</div>
-            </div>
-            
-            <!-- نوع الأمر: محدد -->
-            <div class="order-type-grid-item active" data-type="limit">
-              <div class="order-type-grid-name">محدد</div>
-              <div class="order-type-grid-desc">تنفيذ عند سعر محدد</div>
-            </div>
-            
-            <!-- نوع الأمر: وقف -->
-            <div class="order-type-grid-item" data-type="stop">
-              <div class="order-type-grid-name">وقف</div>
-              <div class="order-type-grid-desc">تنفيذ عند الوصول لسعر معين</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- نافذة التداول -->
-        <div class="trading-order-section">
-          <div class="trading-section-title">نافذة التداول</div>
-          
-          <!-- تم إخفاء أزرار نوع الأمر هنا -->
-          <div class="trading-order-type" style="display: none;">
-            <!-- تم إخفاء هذه الأزرار -->
-            <button class="trading-order-type-btn active" data-type="limit">محدد</button>
-            <button class="trading-order-type-btn" data-type="market">سوقي</button>
-            <button class="trading-order-type-btn" data-type="stop">وقف</button>
-          </div>
-          
-          <div class="trading-order-form">
-            <!-- قسم اختيار البيع أو الشراء داخل النموذج -->
-            <div class="trading-action-select-inner">
-              <button class="trading-action-btn-inner trading-buy-select-btn-inner active" data-action="buy">شراء</button>
-              <button class="trading-action-btn-inner trading-sell-select-btn-inner" data-action="sell">بيع</button>
-            </div>
-            
-            <div class="trading-form-group">
-              <label class="trading-form-label" id="amount-label">المبلغ (BTC)</label>
-              <input type="text" class="trading-form-input" id="amount-input" value="0.1" placeholder="أدخل المبلغ">
-            </div>
-            
-            <!-- حقل سعر التحديد (لأوامر المحدد) -->
-            <div class="trading-form-group additional-field" id="limit-price-field" style="display: block;">
-              <label class="trading-form-label">سعر التحديد</label>
-              <input type="text" class="trading-form-input" id="limit-price-input" placeholder="أدخل سعر التحديد">
-            </div>
-            
-            <!-- حقل سعر الوقف (لأوامر الوقف) -->
-            <div class="trading-form-group additional-field" id="stop-price-field" style="display: none;">
-              <label class="trading-form-label">سعر الوقف</label>
-              <input type="text" class="trading-form-input" id="stop-price-input" placeholder="أدخل سعر الوقف">
-            </div>
-            
-            <div class="trading-form-group">
-              <label class="trading-form-label">النسبة %</label>
-              <div class="percentage-buttons">
-                <button class="percentage-btn" data-percentage="25">25%</button>
-                <button class="percentage-btn" data-percentage="50">50%</button>
-                <button class="percentage-btn" data-percentage="75">75%</button>
-                <button class="percentage-btn" data-percentage="100">100%</button>
-              </div>
-            </div>
-            
-            <div class="trading-form-group">
-              <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                <span class="trading-form-label" id="cost-label">التكلفة الإجمالية</span>
-                <span style="font-weight: 700; color: var(--text-dark); font-size: 12px;" id="total-cost">$6,842.35</span>
-              </div>
-            </div>
-            
-            <!-- زر الشراء/البيع الرئيسي - مصغر -->
-            <button class="trading-main-action-btn buy" id="main-action-btn">شراء BTC</button>
-          </div>
-        </div>
-
-        <!-- الرسم البياني -->
-        <div class="trading-chart-section">
-          <div class="trading-section-title">الرسم البياني المباشر</div>
-          <div class="trading-chart-container">
-            <div class="chart-wrapper">
-              <canvas id="tradingChart"></canvas>
-            </div>
-          </div>
-          
-          <div class="trading-chart-periods">
-            <button class="trading-period-btn active" data-period="1h">1H</button>
-            <button class="trading-period-btn" data-period="4h">4H</button>
-            <button class="trading-period-btn" data-period="1d">1D</button>
-            <button class="trading-period-btn" data-period="1w">1W</button>
-            <button class="trading-period-btn" data-period="1m">1M</button>
-          </div>
-        </div>
-
-        <!-- أوامر مفتوحة مصغرة وأرصدة -->
-        <div class="trading-orders-mini-section">
-          <div class="trading-section-title tabbed-title">
-            <span class="tab-title active" data-tab="orders">تم التنفيذ</span>
-            <span class="tab-title" data-tab="balance">الأرصدة</span>
-          </div>
-          
-          <!-- قسم الأوامر المفتوحة -->
-          <div class="trading-tab-content active" id="orders-tab">
-            <div class="trading-orders-mini-list" id="orders-list">
-              <!-- سيتم إضافة الأوامر ديناميكياً -->
-            </div>
-          </div>
-          
-          <!-- قسم الأرصدة -->
-          <div class="trading-tab-content" id="balance-tab">
-            <div class="balance-list" id="balance-list">
-              <!-- سيتم عرض الأرصدة هنا -->
-            </div>
-          </div>
-        </div>
-
-        <!-- تذييل الصفحة -->
-        <div class="trading-footer">
-          Crynova Trading • استثمر بمسؤولية
+    <div class="wallet-frame">
+      <div class="page-header" style="background: linear-gradient(135deg, #7d3dff, #0072ff);">
+        <button class="page-close-btn" id="tradingBackBtn">&times;</button>
+        <h1>منصة التداول</h1>
+        <p>قيد التطوير</p>
+      </div>
+      <div class="page-content trading-empty-page">
+        <div class="trading-empty-icon">🚧</div>
+        <div class="trading-empty-title">قريباً</div>
+        <div class="trading-empty-desc">
+          منصة التداول قيد التطوير<br>
+          سيتم إطلاقها قريباً بإذن الله
         </div>
       </div>
     </div>
@@ -2093,7 +1128,6 @@
     
     // متغيرات نظام الفرز
     let currentSort = 'default';
-    let originalOrder = [];
 
     // ========== دالة لتحديث الأرصدة في قاعدة البيانات ==========
     async function updateBalancesInFirestore(userId, balances) {
@@ -2130,8 +1164,6 @@
       document.getElementById('receivePage').classList.add('active');
       document.getElementById('sendPage').classList.remove('active');
       document.getElementById('tradingPage').classList.remove('active');
-      
-      // تحديث بيانات صفحة الاستلام
       updateReceivePageData();
     }
 
@@ -2140,8 +1172,6 @@
       document.getElementById('receivePage').classList.remove('active');
       document.getElementById('sendPage').classList.add('active');
       document.getElementById('tradingPage').classList.remove('active');
-      
-      // تحديث بيانات صفحة الإرسال
       updateSendPageData();
     }
 
@@ -2150,9 +1180,6 @@
       document.getElementById('receivePage').classList.remove('active');
       document.getElementById('sendPage').classList.remove('active');
       document.getElementById('tradingPage').classList.add('active');
-      
-      // تهيئة صفحة التداول عند عرضها
-      initializeTradingPage();
     }
 
     // ========== تحديث صفحة الاستلام ==========
@@ -2162,14 +1189,12 @@
 
     // ========== تحديث صفحة الإرسال ==========
     function updateSendPageData() {
-      // تحديث عرض رصيد USDT في البطاقة الصغيرة
       updateUSDTBalanceDisplay();
     }
 
     function updateUSDTBalanceDisplay() {
       const usdtBalance = userBalances['USDT'] || 0;
       const balanceElement = document.getElementById('usdtBalanceDisplay');
-      
       if (balanceElement) {
         balanceElement.textContent = `${usdtBalance.toFixed(2)} USDT`;
       }
@@ -2181,7 +1206,6 @@
         showToast('❌ لا يوجد معرف مستخدم', 'error');
         return;
       }
-      
       copyText(currentUser.id.toString(), 'معرف المستخدم');
     }
 
@@ -2255,7 +1279,6 @@
             balances: defaultBalances,
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
           };
-          
           await walletsRef.set(walletData);
           userBalances = defaultBalances;
           return walletData;
@@ -2285,7 +1308,6 @@
           userBalances = walletData.balances || defaultBalances;
           return walletData;
         }
-        
         return await initializeUserWallet(userId);
       } catch (error) {
         console.error('❌ Error loading wallets:', error);
@@ -2297,15 +1319,9 @@
     async function fetchLivePrices() {
       try {
         const now = Date.now();
-        
-        // تجنب التحديثات السريعة جداً
-        if (now - lastPriceUpdateTime < 500) {
-          return;
-        }
-        
+        if (now - lastPriceUpdateTime < 500) return;
         lastPriceUpdateTime = now;
         
-        // جلب أسعار جميع العملات المتاحة
         const coinSymbols = Object.keys(coinInfo).filter(symbol => symbol !== 'USDT' && symbol !== 'CNC');
         const binancePairs = {
           'BTC': 'BTCUSDT',
@@ -2318,35 +1334,28 @@
           'DOGE': 'DOGEUSDT'
         };
         
-        // محاولة جلب الأسعار من Binance API
         try {
-          // جلب الأسعار لكل عملة
           const pricePromises = coinSymbols.map(async (symbol) => {
             if (symbol === 'USDT' || symbol === 'CNC') {
               return { symbol, price: symbol === 'USDT' ? 1.0 : 0.00, change: 0.0 };
             }
-            
             if (binancePairs[symbol]) {
               try {
-                // جلب السعر الحالي
                 const priceResponse = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${binancePairs[symbol]}`);
                 const priceData = await priceResponse.json();
                 const price = parseFloat(priceData.price);
                 
-                // جلب التغير خلال 24 ساعة
                 const changeResponse = await fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${binancePairs[symbol]}`);
                 const changeData = await changeResponse.json();
                 const change = parseFloat(changeData.priceChangePercent);
                 
                 return { symbol, price, change };
               } catch (error) {
-                // في حالة الخطأ، استخدام القيم السابقة إن وجدت
                 const previousPrice = livePrices[symbol]?.price || 0;
                 const previousChange = livePrices[symbol]?.change || 0;
                 return { symbol, price: previousPrice, change: previousChange };
               }
             } else {
-              // للعملات غير المتوفرة في Binance
               const previousPrice = livePrices[symbol]?.price || 0;
               const previousChange = livePrices[symbol]?.change || 0;
               return { symbol, price: previousPrice, change: previousChange };
@@ -2355,46 +1364,24 @@
           
           const results = await Promise.allSettled(pricePromises);
           
-          // تحديث الأسعار من النتائج الناجحة
           results.forEach(result => {
             if (result.status === 'fulfilled' && result.value) {
               const { symbol, price, change } = result.value;
-              livePrices[symbol] = {
-                price: price || 0,
-                change: change || 0
-              };
+              livePrices[symbol] = { price: price || 0, change: change || 0 };
             }
           });
           
-          // إضافة العملات الخاصة (CNC, USDT)
-          livePrices['CNC'] = {
-            price: 0.50, // سعر CNC افتراضي
-            change: 0.0
-          };
+          livePrices['CNC'] = { price: 0.50, change: 0.0 };
+          livePrices['USDT'] = { price: 1.0, change: 0.0 };
           
-          livePrices['USDT'] = {
-            price: 1.0,
-            change: 0.0
-          };
-          
-          // تحديث الواجهة
           updateWalletsListRealTime();
           updateTotalBalance();
           
-          // تحديث صفحة التداول إذا كانت نشطة
-          if (document.getElementById('tradingPage').classList.contains('active')) {
-            updateTradingPrices();
-            updateMainPair(activePair);
-            updateTotalCost();
-          }
-          
-          // حفظ الأسعار محلياً للاستخدام الاحتياطي
           localStorage.setItem('crynova_last_prices', JSON.stringify(livePrices));
           localStorage.setItem('crynova_last_update', new Date().toISOString());
           
         } catch (binanceError) {
           console.log('Binance API فشل، استخدام البيانات المحفوظة...');
-          // استخدام البيانات المخزنة محلياً كاحتياطي
           const storedPrices = localStorage.getItem('crynova_last_prices');
           if (storedPrices) {
             livePrices = JSON.parse(storedPrices);
@@ -2408,24 +1395,11 @@
       }
     }
 
-    // بدء نظام التحديث التلقائي
     function startPriceUpdates() {
       console.log('🚀 بدء تحديث الأسعار كل ثانية...');
-      
-      // إيقاف أي تحديث سابق
-      if (priceUpdateInterval) {
-        clearInterval(priceUpdateInterval);
-      }
-      
-      // تحديث فوري عند البدء
+      if (priceUpdateInterval) clearInterval(priceUpdateInterval);
       fetchLivePrices();
-      
-      // بدء التحديث كل ثانية
-      priceUpdateInterval = setInterval(() => {
-        fetchLivePrices();
-      }, 1000);
-      
-      // تحديث إضافي بعد 3 ثوان للتأكد
+      priceUpdateInterval = setInterval(() => fetchLivePrices(), 1000);
       setTimeout(() => fetchLivePrices(), 3000);
     }
 
@@ -2435,23 +1409,14 @@
       
       walletsList.innerHTML = '';
       
-      originalOrder = [];
-      
       Object.entries(coinInfo).forEach(([symbol, info]) => {
         const balance = userBalances[symbol] || 0;
         const liveData = livePrices[symbol];
-        
         if (!liveData) return;
         
         const usdValue = balance * liveData.price;
         const changeClass = liveData.change >= 0 ? 'positive' : 'negative';
         const changeIcon = liveData.change >= 0 ? '↗' : '↘';
-        
-        originalOrder.push({
-          symbol: symbol,
-          change: liveData.change,
-          element: null
-        });
 
         const walletElement = document.createElement('div');
         walletElement.className = 'wallet-coin-row';
@@ -2461,9 +1426,7 @@
         
         walletElement.innerHTML = `
         <div class="wallet-coin-left">
-          <div class="wallet-badge">
-            ${info.icon}
-          </div>
+          <div class="wallet-badge">${info.icon}</div>
           <div class="wallet-coin-meta">
             <div class="n">${info.name}</div>
             <div class="s">${symbol}</div>
@@ -2483,7 +1446,6 @@
         walletsList.appendChild(walletElement);
       });
       
-      // تطبيق الفرز الحالي
       applySort(currentSort);
     }
 
@@ -2492,30 +1454,24 @@
       if (!walletsList) return;
       
       const rows = Array.from(walletsList.querySelectorAll('.wallet-coin-row'));
-      
       if (rows.length === 0) return;
       
       switch(sortType) {
         case 'value-high':
-          // الأعلى قيمة حسب نسبة التغيير (من الأعلى إلى الأدنى)
           rows.sort((a, b) => {
             const aChange = parseFloat(a.getAttribute('data-change')) || 0;
             const bChange = parseFloat(b.getAttribute('data-change')) || 0;
-            return bChange - aChange; // تنازلي حسب التغيير
+            return bChange - aChange;
           });
           break;
-          
         case 'value-low':
-          // الأقل قيمة حسب نسبة التغيير (من الأدنى إلى الأعلى)
           rows.sort((a, b) => {
             const aChange = parseFloat(a.getAttribute('data-change')) || 0;
             const bChange = parseFloat(b.getAttribute('data-change')) || 0;
-            return aChange - bChange; // تصاعدي حسب التغيير
+            return aChange - bChange;
           });
           break;
-          
-        case 'default':
-          // الترتيب الافتراضي حسب ترتيب coinInfo
+        default:
           const symbolOrder = Object.keys(coinInfo);
           rows.sort((a, b) => {
             const aSymbol = a.getAttribute('data-symbol');
@@ -2525,10 +1481,8 @@
           break;
       }
       
-      // إعادة ترتيب الصفوف في القائمة
       rows.forEach(row => walletsList.appendChild(row));
       
-      // تحديث حالة الأزرار
       document.querySelectorAll('.wallet-sort-btn').forEach(btn => {
         btn.classList.remove('active');
         if (btn.getAttribute('data-sort') === sortType) {
@@ -2576,25 +1530,17 @@
       const fullName = userName + (userLastName ? ' ' + userLastName : '');
       
       document.getElementById('walletUserName').textContent = fullName;
-      
-      // إخفاء معرف المستخدم كما طلبت
       document.getElementById('walletUserId').style.display = 'none';
-    }
-
-    function copyUserId(userId) {
-      copyText(userId.toString(), 'معرف المستخدم');
     }
 
     // ========== البحث عن مستخدم ==========
     async function searchUser(userId) {
       const resultElement = document.getElementById('userSearchResult');
-      
       if (!userId || userId.trim() === '') {
         resultElement.style.display = 'none';
         return;
       }
       
-      // محاكاة البحث - إذا كان المعرف رقمًا
       if (/^\d+$/.test(userId)) {
         resultElement.innerHTML = `
           <div style="color: var(--success); font-size: 12px;">
@@ -2619,20 +1565,17 @@
       const toUserId = document.getElementById('sendToUserId').value;
       const amount = parseFloat(document.getElementById('sendAmount').value);
       
-      // التحقق من البيانات
       if (!toUserId || !amount || amount <= 0) {
         showToast('❌ يرجى ملء جميع الحقول المطلوبة بشكل صحيح', 'error');
         return;
       }
       
-      // التحقق من الرصيد الكافي
       const balance = userBalances['USDT'] || 0;
       if (balance < amount) {
         showToast(`❌ رصيدك غير كافي. رصيدك الحالي: ${balance.toFixed(2)} USDT`, 'error');
         return;
       }
       
-      // التحقق من أن المستخدم لا يرسل إلى نفسه
       if (toUserId === currentUser.id.toString()) {
         showToast('❌ لا يمكنك إرسال الأموال إلى نفسك', 'error');
         return;
@@ -2640,28 +1583,16 @@
       
       try {
         showLoading(true);
-        
-        // محاكاة عملية الإرسال
         await new Promise(resolve => setTimeout(resolve, 1500));
-        
-        // تحديث الرصيد محلياً
         userBalances['USDT'] = balance - amount;
-        
-        // تحديث واجهة المستخدم
         updateWalletsListRealTime();
         updateTotalBalance();
         updateUSDTBalanceDisplay();
-        
-        // حفظ التغييرات في قاعدة البيانات
         await updateBalancesInFirestore(currentUser.id, userBalances);
-        
         showToast(`✅ تم إرسال ${amount} USDT بنجاح`, 'success');
-        
-        // إعادة تعيين الحقول
         document.getElementById('sendToUserId').value = '';
         document.getElementById('sendAmount').value = '';
         document.getElementById('userSearchResult').style.display = 'none';
-        
       } catch (error) {
         console.error('❌ Error sending funds:', error);
         showToast('❌ حدث خطأ أثناء إرسال الأموال', 'error');
@@ -2670,1004 +1601,19 @@
       }
     }
 
-    // ========== متغيرات وأدوات صفحة التداول ==========
-    let tradingChart = null;
-    let chartPeriod = '1h';
-    let activePair = 'BTC/USDT';
-    let selectedAction = 'buy';
-    let activePercentage = 25;
-    
-    // بيانات أزواج التداول - مبنية ديناميكياً من العملات المتاحة
-    let tradingPairs = {};
-    
-    // بيانات الأوامر المفتوحة
-    let openOrders = [];
-    
-    // بيانات المستخدم للتداول (مستمدة من أرصدة المحفظة)
-    let tradingUserBalance = {};
-    
-    // ========== تهيئة صفحة التداول ==========
-    function initializeTradingPage() {
-      console.log('🚀 تهيئة صفحة التداول...');
-      
-      // تهيئة بيانات التداول
-      initTradingData();
-      
-      // إنشاء الرسم البياني
-      createChart();
-      
-      // عرض الأوامر المفتوحة
-      renderOpenOrders();
-      
-      // عرض الأرصدة
-      renderBalanceList();
-      
-      // إضافة الأحداث للصفحة الجديدة
-      setupTradingPageEvents();
-    }
-    
-    // ========== تهيئة بيانات التداول ==========
-    function initTradingData() {
-      // بناء أزواج التداول من العملات المتاحة
-      generateTradingPairs();
-      
-      // تحديث بيانات المستخدم من أرصدة المحفظة
-      updateTradingBalancesFromWallet();
-      
-      // تحديث الأسعار الحية
-      updateTradingPrices();
-      
-      // تحديث واجهة التداول
-      updateTradingUI();
-      
-      // تحديث قائمة أزواج التداول في الواجهة
-      updateTradingPairsList();
-    }
-    
-    function generateTradingPairs() {
-      // إنشاء أزواج تداول مع USDT لكل عملة (باستثناء USDT نفسها)
-      Object.keys(coinInfo).forEach(symbol => {
-        if (symbol !== 'USDT') {
-          const pair = `${symbol}/USDT`;
-          const coinData = coinInfo[symbol];
-          
-          // سعر افتراضي من livePrices أو قيمة افتراضية
-          const defaultPrice = livePrices[symbol]?.price || 
-                             (symbol === 'BTC' ? 68423.50 : 
-                              symbol === 'ETH' ? 3812.75 : 
-                              symbol === 'XRP' ? 0.6245 : 
-                              symbol === 'SOL' ? 142.30 : 
-                              symbol === 'ADA' ? 0.4821 : 
-                              symbol === 'DOT' ? 7.89 : 
-                              symbol === 'BNB' ? 585.40 : 
-                              symbol === 'DOGE' ? 0.1578 : 
-                              symbol === 'CNC' ? 0.50 : 0.00);
-          
-          const defaultChange = livePrices[symbol]?.change || 
-                              (symbol === 'BTC' ? 2.34 : 
-                               symbol === 'ETH' ? 1.56 : 
-                               symbol === 'XRP' ? -0.78 : 
-                               symbol === 'SOL' ? 4.12 : 
-                               symbol === 'ADA' ? 0.92 : 
-                               symbol === 'DOT' ? -0.45 : 
-                               symbol === 'BNB' ? 1.23 : 
-                               symbol === 'DOGE' ? 3.21 : 
-                               symbol === 'CNC' ? 0.0 : 0.0);
-          
-          tradingPairs[pair] = {
-            price: defaultPrice,
-            change: defaultChange,
-            fullName: `${coinInfo[symbol].name} / Tether`,
-            currency: symbol,
-            symbol: coinInfo[symbol].icon,
-            color: coinInfo[symbol].color || '#0072ff'
-          };
-        }
-      });
-      
-      console.log('✅ تم إنشاء أزواج التداول:', Object.keys(tradingPairs));
-    }
-    
-    function updateTradingBalancesFromWallet() {
-      // تحويل أرصدة المحفظة إلى بيانات التداول
-      tradingUserBalance = {};
-      
-      Object.keys(coinInfo).forEach(symbol => {
-        const key = symbol.toLowerCase();
-        tradingUserBalance[key] = userBalances[symbol] || 0;
-      });
-      
-      console.log('✅ تم تحديث أرصدة التداول:', tradingUserBalance);
-    }
-    
-    function updateTradingPrices() {
-      // تحديث أسعار التداول من livePrices
-      for (const pair in tradingPairs) {
-        const baseCurrency = pair.split('/')[0];
-        if (livePrices[baseCurrency]) {
-          tradingPairs[pair].price = livePrices[baseCurrency].price || tradingPairs[pair].price;
-          tradingPairs[pair].change = livePrices[baseCurrency].change || tradingPairs[pair].change;
-        }
-      }
-    }
-    
-    function updateTradingUI() {
-      // التأكد من أن الزوج النشط موجود
-      if (!tradingPairs[activePair] && Object.keys(tradingPairs).length > 0) {
-        activePair = Object.keys(tradingPairs)[0];
-      }
-      
-      // تحديث شريط الزوج النشط
-      updateMainPair(activePair);
-      
-      // تحديث أزرار النسبة المئوية
-      updatePercentageButtons();
-      
-      // تحديث الزر الرئيسي
-      updateMainActionButton();
-      
-      // تحديث التكلفة الإجمالية
-      updateTotalCost();
-    }
-    
-    // ========== دوال واجهة التداول ==========
-    function updateMainPair(pair) {
-      const pairData = tradingPairs[pair];
-      if (!pairData) return;
-      
-      const priceFormatted = '$' + pairData.price.toLocaleString('en-US', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      });
-      
-      const changeFormatted = (pairData.change >= 0 ? '+' : '') + pairData.change.toFixed(2) + '%';
-      const changeClass = pairData.change >= 0 ? 'positive' : 'negative';
-      
-      // تحديث عناصر الواجهة
-      const mainPairElement = document.querySelector('.trading-pair-mini-name');
-      if (mainPairElement) {
-        mainPairElement.innerHTML = pair + ' <i>▼</i>';
-      }
-      
-      const fullNameElement = document.querySelector('.trading-pair-mini-fullname');
-      if (fullNameElement) {
-        fullNameElement.textContent = pairData.fullName;
-      }
-      
-      const priceElement = document.querySelector('.trading-pair-mini-price');
-      if (priceElement) {
-        priceElement.textContent = priceFormatted;
-      }
-      
-      const changeElement = document.querySelector('.trading-pair-mini-change');
-      if (changeElement) {
-        changeElement.textContent = changeFormatted;
-        changeElement.className = 'trading-pair-mini-change ' + changeClass;
-      }
-      
-      // تحديث تسمية حقل المبلغ
-      const amountLabel = document.getElementById('amount-label');
-      if (amountLabel) {
-        amountLabel.textContent = `المبلغ (${pairData.currency})`;
-      }
-      
-      // تحديث حقل المبلغ
-      const amountInput = document.getElementById('amount-input');
-      if (amountInput) {
-        amountInput.placeholder = `أدخل المبلغ (${pairData.currency})`;
-      }
-      
-      console.log(`✅ تم تحديث زوج التداول إلى: ${pair}`);
-    }
-    
-    function updatePercentageButtons() {
-      const percentageButtons = document.querySelectorAll('.percentage-btn');
-      percentageButtons.forEach(btn => {
-        btn.classList.remove('active');
-        if (parseInt(btn.getAttribute('data-percentage')) === activePercentage) {
-          btn.classList.add('active');
-        }
-      });
-    }
-    
-    function updateMainActionButton() {
-      const mainActionBtn = document.getElementById('main-action-btn');
-      if (!mainActionBtn) return;
-      
-      const pairData = tradingPairs[activePair];
-      
-      if (selectedAction === 'buy') {
-        mainActionBtn.textContent = `شراء ${pairData.currency}`;
-        mainActionBtn.className = 'trading-main-action-btn buy';
-      } else {
-        mainActionBtn.textContent = `بيع ${pairData.currency}`;
-        mainActionBtn.className = 'trading-main-action-btn sell';
-      }
-    }
-    
-    function updateTotalCost() {
-      const amountInput = document.getElementById('amount-input');
-      const totalCostElement = document.getElementById('total-cost');
-      
-      if (!amountInput || !totalCostElement) return;
-      
-      const amount = parseFloat(amountInput.value) || 0;
-      const pairData = tradingPairs[activePair];
-      const price = pairData.price;
-      const totalCost = amount * price;
-      
-      if (!isNaN(totalCost)) {
-        totalCostElement.textContent = '$' + totalCost.toLocaleString('en-US', {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2
-        });
-      }
-    }
-    
-    // ========== إضافة دالة لتحديث قائمة أزواج التداول في الواجهة ==========
-    function updateTradingPairsList() {
-      const pairsList = document.querySelector('.trading-pairs-list');
-      if (!pairsList) return;
-      
-      // تنظيف القائمة الحالية
-      pairsList.innerHTML = '';
-      
-      // إضافة أزواج التداول إلى القائمة
-      Object.entries(tradingPairs).forEach(([pair, data], index) => {
-        const isActive = pair === activePair || (index === 0 && !activePair);
-        const changeClass = data.change >= 0 ? 'positive' : 'negative';
-        const changeIcon = data.change >= 0 ? '+' : '';
-        const priceFormatted = data.price < 1 ? 
-          `$${data.price.toFixed(4)}` : 
-          `$${data.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-        
-        const pairItem = document.createElement('div');
-        pairItem.className = `trading-pair-item ${isActive ? 'active' : ''}`;
-        pairItem.setAttribute('data-pair', pair);
-        pairItem.setAttribute('data-fullname', data.fullName);
-        
-        pairItem.innerHTML = `
-          <div class="trading-pair-item-header">
-            <div class="trading-pair-item-symbol">${pair}</div>
-            <div class="trading-pair-item-change ${changeClass}">${changeIcon}${data.change.toFixed(2)}%</div>
-          </div>
-          <div class="trading-pair-item-details">
-            <div class="trading-pair-item-price">${priceFormatted}</div>
-            <div class="trading-pair-item-volume">24h: $${formatVolume(pair)}</div>
-          </div>
-        `;
-        
-        pairsList.appendChild(pairItem);
-      });
-      
-      // إعادة إرفاع الأحداث
-      reattachTradingPairsEvents();
-    }
-    
-    function formatVolume(pair) {
-      // حجم تداول افتراضي بناءً على العملة
-      const baseCurrency = pair.split('/')[0];
-      const volumes = {
-        'BTC': '42.5B',
-        'ETH': '18.2B',
-        'BNB': '1.8B',
-        'XRP': '2.1B',
-        'ADA': '0.9B',
-        'SOL': '3.8B',
-        'DOT': '0.6B',
-        'DOGE': '1.2B',
-        'CNC': '0.1M'
-      };
-      
-      return volumes[baseCurrency] || '0.1M';
-    }
-    
-    // ========== دوال الرسم البياني ==========
-    function generateChartData(pair, period = '1h') {
-      const pairData = tradingPairs[pair];
-      const basePrice = pairData.price;
-      const dataPoints = period === '1h' ? 24 : 
-                        period === '4h' ? 24 : 
-                        period === '1d' ? 24 : 
-                        period === '1w' ? 28 : 30;
-      
-      let data = [];
-      let labels = [];
-      let currentPrice = basePrice;
-      
-      // توليد التواريخ بناءً على الفترة
-      const now = new Date();
-      for (let i = dataPoints - 1; i >= 0; i--) {
-        let date = new Date(now);
-        
-        if (period === '1h') {
-          date.setMinutes(now.getMinutes() - i * 5);
-          labels.push(date.getHours().toString().padStart(2, '0') + ':' + 
-                     date.getMinutes().toString().padStart(2, '0'));
-        } else if (period === '4h') {
-          date.setHours(now.getHours() - i * 4);
-          labels.push(date.getHours().toString().padStart(2, '0') + ':00');
-        } else if (period === '1d') {
-          date.setHours(now.getHours() - i);
-          labels.push(date.getHours().toString().padStart(2, '0') + ':00');
-        } else if (period === '1w') {
-          date.setDate(now.getDate() - i);
-          labels.push(date.getDate() + '/' + (date.getMonth() + 1));
-        } else { // 1m
-          date.setDate(now.getDate() - i);
-          labels.push(date.getDate() + '/' + (date.getMonth() + 1));
-        }
-        
-        // توليد سعر عشوائي مع اتجاه عام
-        const randomChange = (Math.random() - 0.5) * 0.02;
-        const trend = pairData.change > 0 ? 0.001 : -0.001;
-        currentPrice = currentPrice * (1 + randomChange + trend);
-        
-        data.push(currentPrice);
-      }
-      
-      return { labels, data };
-    }
-    
-    function createChart() {
-      const ctx = document.getElementById('tradingChart');
-      if (!ctx) return;
-      
-      const pairData = tradingPairs[activePair];
-      const chartData = generateChartData(activePair, chartPeriod);
-      
-      // تدمير الرسم البياني القديم إذا كان موجوداً
-      if (tradingChart) {
-        tradingChart.destroy();
-      }
-      
-      // إنشاء الرسم البياني الخطي
-      tradingChart = new Chart(ctx.getContext('2d'), {
-        type: 'line',
-        data: {
-          labels: chartData.labels,
-          datasets: [{
-            label: activePair,
-            data: chartData.data,
-            borderColor: pairData.color || '#0072ff',
-            backgroundColor: 'rgba(0, 114, 255, 0.1)',
-            borderWidth: 2,
-            fill: true,
-            tension: 0.4,
-            pointRadius: 0,
-            pointHoverRadius: 4
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: false
-            },
-            tooltip: {
-              mode: 'index',
-              intersect: false,
-              rtl: true,
-              callbacks: {
-                label: function(context) {
-                  return `السعر: $${context.parsed.y.toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                  })}`;
-                }
-              }
-            }
-          },
-          scales: {
-            x: {
-              display: true,
-              grid: {
-                display: false
-              },
-              ticks: {
-                maxTicksLimit: 6,
-                font: {
-                  size: 9
-                }
-              }
-            },
-            y: {
-              display: true,
-              position: 'right',
-              grid: {
-                color: 'rgba(0,0,0,0.05)'
-              },
-              ticks: {
-                font: {
-                  size: 9
-                },
-                callback: function(value) {
-                  return '$' + value.toLocaleString('en-US', {
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 0
-                  });
-                }
-              }
-            }
-          },
-          interaction: {
-            intersect: false,
-            mode: 'nearest'
-          }
-        }
-      });
-      
-      console.log(`📊 تم إنشاء الرسم البياني لـ ${activePair} (${chartPeriod})`);
-    }
-    
-    // ========== عرض الأوامر المفتوحة ==========
-    function renderOpenOrders() {
-      const ordersList = document.getElementById('orders-list');
-      if (!ordersList) return;
-      
-      ordersList.innerHTML = '';
-      
-      if (openOrders.length === 0) {
-        ordersList.innerHTML = `
-          <div class="no-orders-message">
-            لا توجد أوامر تم تنفيذها بعد<br>
-            <small style="color: var(--text-light); font-size: 10px; display: block; margin-top: 5px;">
-              ستظهر الأوامر المنفذة هنا بعد إتمام الصفقات
-            </small>
-          </div>
-        `;
-        return;
-      }
-      
-      openOrders.forEach(order => {
-        const orderElement = document.createElement('div');
-        orderElement.className = 'trading-order-mini-item';
-        orderElement.setAttribute('data-id', order.id);
-        
-        const orderTypeClass = order.type === 'buy' ? 'buy' : 'sell';
-        const orderTypeText = order.type === 'buy' ? 'شراء' : 'بيع';
-        const formattedAmount = order.amount.toFixed(4);
-        const formattedPrice = '$' + order.price.toLocaleString('en-US', {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2
-        });
-        
-        // حساب الوقت المنقضي
-        const timeDiff = Date.now() - order.date.getTime();
-        const hoursDiff = Math.floor(timeDiff / (1000 * 60 * 60));
-        const minutesDiff = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-        let timeText = '';
-        
-        if (hoursDiff > 0) {
-          timeText = `منذ ${hoursDiff} ساعة`;
-        } else if (minutesDiff > 0) {
-          timeText = `منذ ${minutesDiff} دقيقة`;
-        } else {
-          timeText = 'الآن';
-        }
-        
-        orderElement.innerHTML = `
-          <div class="trading-order-mini-info">
-            <div class="trading-order-mini-pair">${order.pair}</div>
-            <div class="trading-order-mini-type ${orderTypeClass}">${orderTypeText}</div>
-            <div style="font-size: 8px; color: var(--text-light); margin-top: 3px;">${timeText}</div>
-          </div>
-          <div class="trading-order-mini-details">
-            <div class="trading-order-mini-amount">${formattedAmount} ${order.pair.split('/')[0]}</div>
-            <div class="trading-order-mini-price">${formattedPrice}</div>
-          </div>
-          <div style="color: var(--success); font-size: 10px; font-weight: 600; white-space: nowrap;">
-            ✓ تم التنفيذ
-          </div>
-        `;
-        
-        ordersList.appendChild(orderElement);
-      });
-    }
-    
-    // ========== عرض قائمة الأرصدة ==========
-    function renderBalanceList() {
-      const balanceList = document.getElementById('balance-list');
-      if (!balanceList) return;
-      
-      balanceList.innerHTML = '';
-      
-      // عرض جميع العملات من coinInfo
-      Object.entries(coinInfo).forEach(([symbol, info]) => {
-        const key = symbol.toLowerCase();
-        const amount = tradingUserBalance[key] || 0;
-        let usdValue = 0;
-        
-        // حساب القيمة بالدولار
-        if (symbol === 'USDT') {
-          usdValue = amount;
-        } else {
-          const pair = `${symbol}/USDT`;
-          if (tradingPairs[pair]) {
-            usdValue = amount * tradingPairs[pair].price;
-          } else if (livePrices[symbol]) {
-            usdValue = amount * livePrices[symbol].price;
-          }
-        }
-        
-        const balanceItem = document.createElement('div');
-        balanceItem.className = 'balance-item';
-        balanceItem.innerHTML = `
-          <div class="balance-currency">
-            <span style="width: 20px; height: 20px; border-radius: 50%; background: ${info.color || '#0072ff'}; display: inline-block;"></span>
-            <div>
-              <div>${symbol}</div>
-              <div style="font-size: 9px; color: var(--text-light);">${info.name}</div>
-            </div>
-          </div>
-          <div style="text-align: left;">
-            <div class="balance-amount">${amount.toFixed(4)} ${symbol}</div>
-            <div class="balance-usd-value">$${usdValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
-          </div>
-        `;
-        
-        balanceList.appendChild(balanceItem);
-      });
-    }
-
-    // ========== إعداد أحداث صفحة التداول ==========
-    function setupTradingPageEvents() {
-      // عناصر DOM الرئيسية
-      const mainPair = document.getElementById('main-pair');
-      const pairsSection = document.getElementById('pairs-section');
-      const closePairsBtn = document.querySelector('.close-pairs-btn');
-      const periodButtons = document.querySelectorAll('.trading-period-btn');
-      const actionButtons = document.querySelectorAll('.trading-action-btn-inner');
-      const percentageButtons = document.querySelectorAll('.percentage-btn');
-      const orderTypeGridItems = document.querySelectorAll('.order-type-grid-item');
-      const closeOrderTypeBtn = document.querySelector('.close-order-type-btn');
-      const orderTypeMini = document.getElementById('order-type-mini');
-      const orderTypeGrid = document.getElementById('order-type-grid');
-      const mainActionBtn = document.getElementById('main-action-btn');
-      const amountInput = document.getElementById('amount-input');
-      const tabTitles = document.querySelectorAll('.tab-title');
-      
-      if (!mainPair) return;
-      
-      // النقر على شريط زوج التداول الرئيسي
-      mainPair.addEventListener('click', togglePairsSection);
-      
-      // النقر على زر إغلاق قائمة الأزواج
-      if (closePairsBtn) {
-        closePairsBtn.addEventListener('click', hidePairsSection);
-      }
-      
-      // إعادة إرفاع أحداث أزواج التداول
-      reattachTradingPairsEvents();
-      
-      // اختيار فترة الرسم البياني
-      periodButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-          periodButtons.forEach(b => b.classList.remove('active'));
-          this.classList.add('active');
-          chartPeriod = this.getAttribute('data-period');
-          updateChart();
-          console.log('✅ تم اختيار فترة:', this.textContent);
-        });
-      });
-      
-      // اختيار البيع أو الشراء
-      actionButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-          // إزالة النشاط من جميع الأزرار
-          actionButtons.forEach(b => b.classList.remove('active'));
-          // إضافة النشاط للزر المحدد
-          this.classList.add('active');
-          
-          selectedAction = this.getAttribute('data-action');
-          updateMainActionButton();
-          
-          // تحديث المبلغ بناءً على النسبة الحالية بعد تغيير العملية
-          updateAmountFromPercentage(activePercentage);
-          
-          console.log('✅ تم اختيار العملية:', selectedAction);
-        });
-      });
-      
-      // اختيار النسبة المئوية
-      percentageButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-          // تحديث النسبة النشطة
-          activePercentage = parseInt(this.getAttribute('data-percentage'));
-          
-          // تحديث حالة الأزرار
-          updatePercentageButtons();
-          
-          // تحديث المبلغ بناءً على النسبة المحددة
-          updateAmountFromPercentage(activePercentage);
-          
-          console.log('✅ تم اختيار النسبة:', activePercentage + '%');
-        });
-      });
-      
-      // النقر على شريط نوع الأمر المصغر
-      if (orderTypeMini) {
-        orderTypeMini.addEventListener('click', function(e) {
-          if (e.target.closest('.trading-pair-mini')) {
-            showOrderTypeGrid();
-            
-            // إخفاء قائمة الأزواج إذا كانت ظاهرة
-            if (pairsSection.classList.contains('show')) {
-              hidePairsSection();
-            }
-          }
-        });
-      }
-      
-      // النقر على نوع أمر في الشبكة
-      orderTypeGridItems.forEach(item => {
-        item.addEventListener('click', function() {
-          const orderType = this.getAttribute('data-type');
-          
-          // تحديث النوع النشط
-          updateActiveOrderTypeInGrid(orderType);
-          
-          // تحديث الشريط المصغر
-          updateOrderTypeMini(orderType);
-          
-          // تحديث النموذج
-          setOrderType(orderType);
-          
-          // إخفاء الشبكة
-          hideOrderTypeGrid();
-          
-          console.log('✅ تم اختيار نوع الأمر:', orderType);
-        });
-      });
-      
-      // زر إغلاق شبكة أنواع الأوامر
-      if (closeOrderTypeBtn) {
-        closeOrderTypeBtn.addEventListener('click', hideOrderTypeGrid);
-      }
-      
-      // تحديث التكلفة عند تغيير المبلغ
-      if (amountInput) {
-        amountInput.addEventListener('input', updateTotalCost);
-      }
-      
-      // الزر الرئيسي للشراء/البيع
-      if (mainActionBtn) {
-        mainActionBtn.addEventListener('click', function() {
-          executeTrade();
-        });
-      }
-      
-      // تبديل التبويبات بين الأوامر والأرصدة
-      tabTitles.forEach(tab => {
-        tab.addEventListener('click', function() {
-          const tabName = this.getAttribute('data-tab');
-          
-          // إزالة النشاط من جميع التبويبات والمحتويات
-          document.querySelectorAll('.tab-title').forEach(t => t.classList.remove('active'));
-          document.querySelectorAll('.trading-tab-content').forEach(c => c.classList.remove('active'));
-          
-          // تفعيل التبويب النشط
-          this.classList.add('active');
-          const tabElement = document.getElementById(tabName + '-tab');
-          if (tabElement) {
-            tabElement.classList.add('active');
-          }
-          
-          // إذا كان التبويب النشط هو "balance"، نقوم بعرض الأرصدة
-          if (tabName === 'balance') {
-            renderBalanceList();
-          }
-        });
-      });
-      
-      // تحديث تلقائي للأسعار كل 10 ثواني
-      setInterval(() => {
-        updateTradingPrices();
-        updateMainPair(activePair);
-        updateTotalCost();
-        updateChart();
-      }, 10000);
-    }
-    
-    // ========== دوال إضافية لصفحة التداول ==========
-    function togglePairsSection() {
-      const pairsSection = document.getElementById('pairs-section');
-      const arrowIcon = document.querySelector('.trading-pair-mini-name i');
-      
-      if (pairsSection && arrowIcon) {
-        pairsSection.classList.toggle('show');
-        arrowIcon.classList.toggle('active');
-        
-        // إخفاء شبكة أنواع الأوامر إذا كانت ظاهرة
-        const orderTypeGrid = document.getElementById('order-type-grid');
-        if (orderTypeGrid && orderTypeGrid.classList.contains('show')) {
-          hideOrderTypeGrid();
-        }
-      }
-    }
-    
-    function hidePairsSection() {
-      const pairsSection = document.getElementById('pairs-section');
-      const arrowIcon = document.querySelector('.trading-pair-mini-name i');
-      
-      if (pairsSection) pairsSection.classList.remove('show');
-      if (arrowIcon) arrowIcon.classList.remove('active');
-    }
-    
-    function reattachTradingPairsEvents() {
-      const pairItems = document.querySelectorAll('.trading-pair-item');
-      
-      // النقر على زوج في القائمة
-      pairItems.forEach(item => {
-        item.addEventListener('click', function() {
-          const selectedPair = this.getAttribute('data-pair');
-          const selectedFullName = this.getAttribute('data-fullname');
-          
-          // تحديث الزوج النشط
-          activePair = selectedPair;
-          
-          // تحديث الواجهة
-          updateMainPair(selectedPair);
-          updateActivePairInList(selectedPair);
-          updateChart();
-          
-          // إخفاء قائمة الأزواج
-          hidePairsSection();
-          
-          // تحديث التكلفة الإجمالية
-          updateTotalCost();
-          
-          console.log(`✅ تم اختيار زوج التداول: ${selectedPair}`);
-        });
-      });
-    }
-    
-    function updateActivePairInList(pair) {
-      const pairItems = document.querySelectorAll('.trading-pair-item');
-      pairItems.forEach(item => {
-        item.classList.remove('active');
-        if (item.getAttribute('data-pair') === pair) {
-          item.classList.add('active');
-        }
-      });
-    }
-    
-    function showOrderTypeGrid() {
-      const orderTypeGrid = document.getElementById('order-type-grid');
-      const arrowIcon = document.querySelector('.trading-order-type-mini i');
-      
-      if (orderTypeGrid) orderTypeGrid.classList.add('show');
-      if (arrowIcon) arrowIcon.classList.add('active');
-    }
-    
-    function hideOrderTypeGrid() {
-      const orderTypeGrid = document.getElementById('order-type-grid');
-      const arrowIcon = document.querySelector('.trading-order-type-mini i');
-      
-      if (orderTypeGrid) orderTypeGrid.classList.remove('show');
-      if (arrowIcon) arrowIcon.classList.remove('active');
-    }
-    
-    function updateActiveOrderTypeInGrid(orderType) {
-      const orderTypeGridItems = document.querySelectorAll('.order-type-grid-item');
-      orderTypeGridItems.forEach(item => {
-        item.classList.remove('active');
-        if (item.getAttribute('data-type') === orderType) {
-          item.classList.add('active');
-        }
-      });
-    }
-    
-    function updateOrderTypeMini(orderType) {
-      const typeNames = {
-        'market': 'سوقي',
-        'limit': 'محدد',
-        'stop': 'وقف'
-      };
-      
-      const typeDescriptions = {
-        'market': 'تنفيذ فوري بالسعر الحالي',
-        'limit': 'تنفيذ عند سعر محدد',
-        'stop': 'تنفيذ عند الوصول لسعر معين'
-      };
-      
-      const orderTypeMini = document.getElementById('order-type-mini');
-      if (orderTypeMini) {
-        const miniName = orderTypeMini.querySelector('.trading-pair-mini-name');
-        const miniFullName = orderTypeMini.querySelector('.trading-pair-mini-fullname');
-        
-        if (miniName) {
-          miniName.innerHTML = `نوع الأمر: ${typeNames[orderType]} <i>▼</i>`;
-        }
-        if (miniFullName) {
-          miniFullName.textContent = typeDescriptions[orderType];
-        }
-      }
-    }
-    
-    function setOrderType(orderType) {
-      // إخفاء جميع الحقول الإضافية أولاً
-      document.querySelectorAll('.additional-field').forEach(field => {
-        field.style.display = 'none';
-      });
-      
-      // إظهار الحقول المناسبة بناءً على نوع الأمر
-      if (orderType === 'limit') {
-        const limitPriceField = document.getElementById('limit-price-field');
-        const limitPriceInput = document.getElementById('limit-price-input');
-        if (limitPriceField) limitPriceField.style.display = 'block';
-        if (limitPriceInput) {
-          const currentPrice = tradingPairs[activePair].price;
-          limitPriceInput.value = currentPrice.toFixed(2);
-        }
-      } else if (orderType === 'stop') {
-        const stopPriceField = document.getElementById('stop-price-field');
-        const stopPriceInput = document.getElementById('stop-price-input');
-        if (stopPriceField) stopPriceField.style.display = 'block';
-        if (stopPriceInput) {
-          const currentPrice = tradingPairs[activePair].price;
-          const stopPrice = currentPrice * 0.98; // 2% أقل للسعر الحالي كمثال
-          stopPriceInput.value = stopPrice.toFixed(2);
-        }
-      }
-    }
-    
-    function updateAmountFromPercentage(percentage) {
-      const amountInput = document.getElementById('amount-input');
-      if (!amountInput) return;
-      
-      const pairData = tradingPairs[activePair];
-      const price = pairData.price;
-      
-      // حساب المبلغ بناءً على النسبة المئوية من الرصيد المتاح
-      let calculatedAmount;
-      
-      if (selectedAction === 'buy') {
-        // للشراء: نسبة من رصيد USDT
-        const maxAmount = tradingUserBalance.usdt / price;
-        calculatedAmount = maxAmount * (percentage / 100);
-      } else {
-        // للبيع: نسبة من رصيد العملة
-        const currency = pairData.currency.toLowerCase();
-        const maxAmount = tradingUserBalance[currency] || 0;
-        calculatedAmount = maxAmount * (percentage / 100);
-      }
-      
-      amountInput.value = calculatedAmount.toFixed(4);
-      updateTotalCost();
-    }
-    
-    function updateChart() {
-      if (tradingChart) {
-        tradingChart.destroy();
-      }
-      createChart();
-    }
-    
-    async function executeTrade() {
-      const amountInput = document.getElementById('amount-input');
-      const pairData = tradingPairs[activePair];
-      const currency = pairData.currency.toLowerCase();
-      
-      if (!amountInput) return;
-      
-      const amount = parseFloat(amountInput.value) || 0;
-      
-      if (selectedAction === 'buy') {
-        // عملية الشراء
-        const cost = amount * pairData.price;
-        
-        if (cost > tradingUserBalance.usdt) {
-          alert(`❌ رصيد USDT غير كافي! الرصيد المتاح: $${tradingUserBalance.usdt.toFixed(2)}`);
-          return;
-        }
-        
-        if (amount <= 0) {
-          alert('❌ يرجى إدخال مبلغ صالح للشراء');
-          return;
-        }
-        
-        // تحديث الرصيد محلياً
-        tradingUserBalance.usdt -= cost;
-        tradingUserBalance[currency] = (tradingUserBalance[currency] || 0) + amount;
-        
-        // تحديث أرصدة المستخدم الأصلية
-        userBalances['USDT'] = tradingUserBalance.usdt;
-        userBalances[pairData.currency] = tradingUserBalance[currency];
-        
-        // حفظ التغييرات في قاعدة البيانات
-        await updateBalancesInFirestore(currentUser.id, userBalances);
-        
-        // إضافة أمر جديد
-        const newOrder = {
-          id: openOrders.length > 0 ? Math.max(...openOrders.map(o => o.id)) + 1 : 1,
-          pair: activePair,
-          type: 'buy',
-          amount: amount,
-          price: pairData.price,
-          orderType: 'market',
-          date: new Date(),
-          status: 'completed'
-        };
-        
-        openOrders.unshift(newOrder);
-        
-        alert(`✅ تم شراء ${amount} ${pairData.currency} (${activePair}) بنجاح!\nالتكلفة: $${cost.toFixed(2)}`);
-        
-      } else {
-        // عملية البيع
-        const revenue = amount * pairData.price;
-        
-        if (amount > (tradingUserBalance[currency] || 0)) {
-          alert(`❌ رصيد ${pairData.currency} غير كافي! الرصيد المتاح: ${(tradingUserBalance[currency] || 0).toFixed(4)} ${pairData.currency}`);
-          return;
-        }
-        
-        if (amount <= 0) {
-          alert('❌ يرجى إدخال مبلغ صالح للبيع');
-          return;
-        }
-        
-        // تحديث الرصيد محلياً
-        tradingUserBalance.usdt += revenue;
-        tradingUserBalance[currency] = (tradingUserBalance[currency] || 0) - amount;
-        
-        // تحديث أرصدة المستخدم الأصلية
-        userBalances['USDT'] = tradingUserBalance.usdt;
-        userBalances[pairData.currency] = tradingUserBalance[currency];
-        
-        // حفظ التغييرات في قاعدة البيانات
-        await updateBalancesInFirestore(currentUser.id, userBalances);
-        
-        // إضافة أمر جديد
-        const newOrder = {
-          id: openOrders.length > 0 ? Math.max(...openOrders.map(o => o.id)) + 1 : 1,
-          pair: activePair,
-          type: 'sell',
-          amount: amount,
-          price: pairData.price,
-          orderType: 'market',
-          date: new Date(),
-          status: 'completed'
-        };
-        
-        openOrders.unshift(newOrder);
-        
-        alert(`✅ تم بيع ${amount} ${pairData.currency} (${activePair}) بنجاح!\nالإيراد: $${revenue.toFixed(2)}`);
-      }
-      
-      // تحديث الواجهة في الصفحة الرئيسية أيضاً
-      updateWalletsListRealTime();
-      updateTotalBalance();
-      
-      // تحديث واجهة التداول
-      updateTotalCost();
-      renderBalanceList();
-      renderOpenOrders();
-      
-      // تحديث المبلغ بناءً على النسبة الحالية بعد إجراء العملية
-      updateAmountFromPercentage(activePercentage);
-      
-      console.log(`✅ أمر ${selectedAction}:`, amount, activePair);
-    }
-
     // ========== التهيئة النهائية ==========
     document.addEventListener('DOMContentLoaded', function() {
       console.log('🚀 Initializing Crynova Wallet System...');
       
-      // أحداث الأزرار الرئيسية
       document.getElementById('walletReceiveBtn').addEventListener('click', showReceivePage);
       document.getElementById('receiveBackBtn').addEventListener('click', showMainPage);
       
       document.getElementById('walletSendBtn').addEventListener('click', showSendPage);
       document.getElementById('sendBackBtn').addEventListener('click', showMainPage);
       
-      // زر التداول
       document.getElementById('walletTradeBtn').addEventListener('click', showTradingPage);
       document.getElementById('tradingBackBtn').addEventListener('click', showMainPage);
       
-      // إضافة أحداث لأزرار الفرز
       document.querySelectorAll('.wallet-sort-btn').forEach(btn => {
         btn.addEventListener('click', function() {
           const sortType = this.getAttribute('data-sort');
@@ -3676,10 +1622,8 @@
         });
       });
       
-      // تهيئة Telegram WebApp
       initializeTelegramWebApp();
       
-      // تشغيل اختبار النظام بعد 3 ثواني
       setTimeout(() => {
         testSystem();
       }, 3000);
@@ -3690,38 +1634,26 @@
       try {
         if (window.Telegram && Telegram.WebApp) {
           const tg = Telegram.WebApp;
-          
           tg.expand();
           tg.setBackgroundColor('#ffffff');
-          
           const user = tg.initDataUnsafe.user;
           
           if (user && user.id) {
             console.log('👤 بيانات مستخدم Telegram:', user);
-            
-            // تحديث المستخدم الحالي
             currentUser = {
               id: user.id,
               firstName: user.first_name || 'مستخدم',
               lastName: user.last_name || '',
               username: user.username || null
             };
-            
-            // تحديث واجهة المستخدم
             updateUserInterface(currentUser);
-            
-            // تهيئة المحفظة
             await initializeUserWallet(user.id);
             await loadUserWallets(user.id);
-            
-            // بدء تحديث الأسعار كل ثانية
             startPriceUpdates();
-            
           } else {
             console.log('❌ لم يتم العثور على بيانات المستخدم في Telegram');
             useMockData();
           }
-          
         } else {
           console.log('❌ Telegram WebApp غير متوفر');
           useMockData();
@@ -3732,7 +1664,6 @@
       }
     }
 
-    // دالة استخدام بيانات تجريبية
     function useMockData() {
       const mockUser = {
         id: 5922049376,
@@ -3740,11 +1671,8 @@
         last_name: 'Khezzari', 
         username: 'A_mja_d_0_5'
       };
-      
       currentUser = mockUser;
       updateUserInterface(mockUser);
-      
-      // إضافة أرصدة تجريبية للاختبار
       userBalances = {
         'BTC': 0.005,
         'ETH': 0.1,
@@ -3757,8 +1685,6 @@
         'DOT': 10,
         'DOGE': 5000
       };
-      
-      // تهيئة البيانات التجريبية
       initializeUserSystem(mockUser);
     }
 
@@ -3766,24 +1692,20 @@
       try {
         await initializeUserWallet(userData.id);
         await loadUserWallets(userData.id);
-        
-        // بدء تحديث الأسعار كل ثانية
         startPriceUpdates();
-        
       } catch (error) {
         console.error('❌ Error initializing user system:', error);
       }
     }
 
-    // دالة اختبار النظام
-    async function testSystem() {
+    function testSystem() {
       console.log('🧪 بدء اختبار النظام...');
       console.log('👤 المستخدم الحالي:', currentUser);
       console.log('📊 الأرصدة الحالية:', userBalances);
       console.log('💱 العملة المحددة للإرسال: USDT (ثابتة)');
-      console.log('📈 منصة التداول: جاهزة');
       console.log('🔄 نظام تحديث الأسعار: نشط (كل ثانية)');
       console.log('🔢 نظام الفرز: جاهز (الافتراضي، الأعلى قيمة، الأقل قيمة)');
+      console.log('📈 منصة التداول: معطلة (صفحة فارغة)');
     }
   </script>
 </body>
